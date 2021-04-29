@@ -42,7 +42,7 @@ def get_config():
     cfg = VersioneerConfig()
     cfg.VCS = "git"
     cfg.style = "pep440"
-    cfg.tag_prefix = "tensorflow-keras/"
+    cfg.tag_prefix = ""
     cfg.parentdir_prefix = ""
     cfg.versionfile_source = "neptune_tensorflow_keras/_version.py"
     cfg.verbose = False
