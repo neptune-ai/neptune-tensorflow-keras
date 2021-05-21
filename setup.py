@@ -36,7 +36,13 @@ def main():
         author='neptune.ai',
         support='contact@neptune.ai',
         author_email='contact@neptune.ai',
-        url="https://github.com/neptune-ai/neptune-tensorflow-keras",
+        # package url management: https://stackoverflow.com/a/56243786/1565454
+        url="https://neptune.ai/",
+        project_urls={
+            'Tracker': 'https://github.com/neptune-ai/neptune-tensorflow-keras/issues',
+            'Source': 'https://github.com/neptune-ai/neptune-tensorflow-keras',
+            'Documentation': 'https://docs.neptune.ai/integrations-and-supported-tools/model-training/tensorflow-keras',
+        },
         long_description=readme,
         long_description_content_type="text/markdown",
         license='Apache License 2.0',
