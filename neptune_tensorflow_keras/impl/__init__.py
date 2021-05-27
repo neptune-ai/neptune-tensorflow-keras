@@ -14,9 +14,6 @@
 # limitations under the License.
 #
 
-from neptune.new import Run
-from neptune.new.exceptions import NeptuneException
-from neptune.new.internal.utils import verify_type
 from typing import Optional
 
 # Note: we purposefully try to import `tensorflow.keras.callbacks.Callback`
@@ -35,10 +32,22 @@ except ImportError:
 
         As Keras is now part of Tensorflow you should install it by running
             pip install tensorflow"""
-        raise ModuleNotFoundError(msg) # pylint:disable=undefined-variable
+        raise ModuleNotFoundError(msg)  # pylint:disable=undefined-variable
 
+try:
+    # neptune-client=0.9.0 package structure
+    from neptune.new import Run
+    from neptune.new.exceptions import NeptuneException
+    from neptune.new.internal.utils import verify_type
+except ImportError:
+    # neptune-client=1.0.0 package structure
+    from neptune import Run
+    from neptune.exceptions import NeptuneException
+    from neptune.internal.utils import verify_type
 
 from neptune_tensorflow_keras import __version__
+
+INTEGRATION_VERSION_KEY = 'source_code/integrations/neptune-tensorflow-keras'
 
 
 class NeptuneCallback(Callback):
@@ -99,7 +108,7 @@ class NeptuneCallback(Callback):
         else:
             self._metric_logger = run
 
-        run['source_code/integrations/neptune-tensorflow-keras'] = __version__
+        run[INTEGRATION_VERSION_KEY] = __version__
 
     def _log_metrics(self, logs, trigger):
         if not logs:
