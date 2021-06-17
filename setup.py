@@ -1,8 +1,8 @@
 import os
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
-from neptune_tensorflow_keras._version import get_versions
+import versioneer
 
 
 def main():
@@ -27,7 +27,7 @@ def main():
             if line.startswith('Version:'):
                 version = line[8:].strip()
     else:
-        version = get_versions()["version"]
+        version = versioneer.get_version()
 
     setup(
         name='neptune-tensorflow-keras',
@@ -48,11 +48,13 @@ def main():
         license='Apache License 2.0',
         install_requires=base_libs,
         extras_require=extras,
-        packages=['neptune_tensorflow_keras', 'neptune_tensorflow_keras.impl'],
+        packages=find_packages(),
+        cmdclass=versioneer.get_cmdclass(),
         zip_safe=False,
         classifiers=[
             # As from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-            'Development Status :: 5 - Production/Stable',
+            'Development Status :: 4 - Beta',
+            # 'Development Status :: 5 - Production/Stable',  # Switch to Stable when applicable
             'Environment :: Console',
             'Intended Audience :: Developers',
             'Intended Audience :: Science/Research',
