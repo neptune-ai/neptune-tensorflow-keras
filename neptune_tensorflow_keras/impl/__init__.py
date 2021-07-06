@@ -44,7 +44,8 @@ except ImportError:
     # neptune-client>=1.0.0 package structure
     from neptune import Run
     from neptune.exceptions import NeptuneException
-    from neptune.internal.utils import verify_type, expect_not_an_experiment
+    from neptune.internal.utils import verify_type
+    from neptune.internal.utils.compatibility import expect_not_an_experiment
 
 from neptune_tensorflow_keras import __version__
 
