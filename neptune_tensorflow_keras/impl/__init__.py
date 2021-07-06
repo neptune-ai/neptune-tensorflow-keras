@@ -35,15 +35,17 @@ except ImportError:
         raise ModuleNotFoundError(msg)  # pylint:disable=undefined-variable
 
 try:
-    # neptune-client=0.9.0 package structure
+    # neptune-client=0.9.0+ package structure
     from neptune.new import Run
     from neptune.new.exceptions import NeptuneException
     from neptune.new.internal.utils import verify_type
+    from neptune.new.internal.utils.compatibility import expect_not_an_experiment
 except ImportError:
-    # neptune-client=1.0.0 package structure
+    # neptune-client>=1.0.0 package structure
     from neptune import Run
     from neptune.exceptions import NeptuneException
     from neptune.internal.utils import verify_type
+    from neptune.internal.utils.compatibility import expect_not_an_experiment
 
 from neptune_tensorflow_keras import __version__
 
@@ -94,6 +96,7 @@ class NeptuneCallback(Callback):
     def __init__(self, run: Run, base_namespace: Optional[str] = None):
         super().__init__()
 
+        expect_not_an_experiment(run)
         verify_type('run', run, Run)
         verify_type('base_namespace', base_namespace, str)
 
