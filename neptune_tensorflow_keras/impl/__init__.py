@@ -53,7 +53,7 @@ INTEGRATION_VERSION_KEY = 'source_code/integrations/neptune-tensorflow-keras'
 
 
 class NeptuneCallback(Callback):
-    """Logs Keras metrics to Neptune.
+    """Captures model training metadata and logs them to Neptune. 
 
     Goes over the `last_metrics` and `smooth_loss` after each batch and epoch
     and logs them to Neptune.
@@ -64,7 +64,7 @@ class NeptuneCallback(Callback):
         run: `neptune.new.Run`:
             Neptune run, required.
         base_namespace: str, optional:
-            Namespace, in which all series will be put.
+            Namespace under which all metadata logged by the NeptuneCallback will be stored.
 
     Example:
 
@@ -74,8 +74,8 @@ class NeptuneCallback(Callback):
 
             import neptune.new as neptune
 
-            run = neptune.init(api_token='ANONYMOUS',
-                                      project='shared/keras-integration')
+            run = neptune.init(project="common/tf-keras-integration",
+                               api_token="ANONYMOUS")
 
         Instantiate the callback and pass
         it to callbacks argument of `model.fit()`:
@@ -83,11 +83,10 @@ class NeptuneCallback(Callback):
         .. code:: python
 
             from neptune.new.integrations.tensorflow_keras import NeptuneCallback
+            neptune_callback = NeptuneCallback(run=run)
 
             model.fit(x_train, y_train,
-                      epochs=PARAMS['epoch_nr'],
-                      batch_size=PARAMS['batch_size'],
-                      callbacks=[NeptuneMonitor(run)])
+                      callbacks=[neptune_callback])
 
     Note:
         You need to have Keras or Tensorflow 2 installed on your computer to use this module.
