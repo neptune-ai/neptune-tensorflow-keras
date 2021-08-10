@@ -1,3 +1,8 @@
+## neptune-tensorflow-keras 0.9.9 [UNRELEASED]
+
+### Fixes
+- Small fixes and updates to NeptuneCallback docstrings.
+
 ## neptune-tensorflow-keras 0.9.8
 
 ### Features
