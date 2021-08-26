@@ -97,7 +97,7 @@ class NeptuneCallback(Callback):
 
         expect_not_an_experiment(run)
         verify_type('run', run, Run)
-        verify_type('base_namespace', base_namespace, str)
+        verify_type('base_namespace', base_namespace, (str, type(None)))
 
         self._base_namespace = ''
         if base_namespace:
