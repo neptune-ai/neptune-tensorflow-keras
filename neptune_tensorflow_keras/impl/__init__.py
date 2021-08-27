@@ -112,29 +112,28 @@ class NeptuneCallback(Callback):
 
         run[INTEGRATION_VERSION_KEY] = __version__
 
-    def _log_metrics(self, logs, trigger: str, prefix: str = None):
+    def _log_metrics(self, logs, category: str, trigger: str):
         if not logs:
             return
 
-        logger = self._metric_logger[trigger]
+        logger = self._metric_logger[category][trigger]
 
         for metric, value in logs.items():
             try:
-                if metric in ('batch', 'size'):
+                if metric in ('batch', 'size') or metric.startswith('val_'):
                     continue
-                if prefix:
-                    logger[f'{prefix}_{metric}'].log(value)
-                else:
-                    logger[metric].log(value)
-            except NeptuneException as e:
-                print(e)
+                logger[metric].log(value)
+            except NeptuneException:
                 pass
 
     def on_train_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
-        self._log_metrics(logs, 'batch')
+        self._log_metrics(logs, 'train', 'batch')
 
     def on_epoch_end(self, epoch, logs=None):  # pylint:disable=unused-argument
-        self._log_metrics(logs, 'epoch')
+        self._log_metrics(logs, 'train', 'epoch')
 
     def on_test_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
-        self._log_metrics(logs, 'batch', 'val')
+        self._log_metrics(logs, 'test', 'batch')
+
+    def on_test_end(self, logs=None):
+        self._log_metrics(logs, 'test', 'epoch')
