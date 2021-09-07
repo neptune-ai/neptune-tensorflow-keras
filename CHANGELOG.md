@@ -1,4 +1,4 @@
-## neptune-tensorflow-keras 0.9.9 [UNRELEASED]
+## neptune-tensorflow-keras 0.9.9
 
 ### Features
 - Added logging metrics in test and validation ([#9](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/9))
