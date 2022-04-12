@@ -30,37 +30,36 @@ Experiment tracking, model registry, data versioning, and live model monitoring 
 * [Runs logged in the Neptune app](https://app.neptune.ai/o/common/org/tf-keras-integration/e/TFK-18/all)
 * [Run example in Google Colab](https://colab.research.google.com/github/neptune-ai/examples/blob/master/integrations-and-supported-tools/tensorflow-keras/notebooks/Neptune_TensorFlow_Keras.ipynb)
 
-## Minimal example
+## Example
 
 ```python
-import tensorflow as tf
+# On the command line:
+pip install tensorflow neptune-client neptune-tensorflow-keras
+```
+```python
+# In Python:
 import neptune.new as neptune
 from neptune.new.integrations.tensorflow_keras import NeptuneCallback
 
-run = neptune.init(project='common/tf-keras-integration', api_token='ANONYMOUS')
 
-mnist = tf.keras.datasets.mnist
-(x_train, y_train),(x_test, y_test) = mnist.load_data()
-x_train, x_test = x_train / 255.0, x_test / 255.0
+# Start a run
+run = neptune.init(project="common/tf-keras-integration",
+                   api_token="ANONYMOUS")
 
-model = tf.keras.models.Sequential([
-  tf.keras.layers.Flatten(),
-  tf.keras.layers.Dense(256, activation=tf.keras.activations.relu),
-  tf.keras.layers.Dropout(0.5),
-  tf.keras.layers.Dense(10, activation=tf.keras.activations.softmax)
-])
 
-optimizer = tf.keras.optimizers.SGD(lr=0.005, momentum=0.4,)
+# Create a NeptuneCallback instance
+neptune_cbk = NeptuneCallback(run=run, base_namespace="metrics")
 
-model.compile(optimizer=optimizer,
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
 
-neptune_cbk = NeptuneCallback(run=run, base_namespace='metrics')
+# Pass the callback to model.fit()
 model.fit(x_train, y_train,
           epochs=5,
           batch_size=64,
           callbacks=[neptune_cbk])
+
+
+# Stop the run
+run.stop()
 ```
 
 ## Support
