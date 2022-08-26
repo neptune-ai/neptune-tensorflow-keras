@@ -49,11 +49,11 @@ except ImportError:
 
 from neptune_tensorflow_keras import __version__
 
-INTEGRATION_VERSION_KEY = 'source_code/integrations/neptune-tensorflow-keras'
+INTEGRATION_VERSION_KEY = "source_code/integrations/neptune-tensorflow-keras"
 
 
 class NeptuneCallback(Callback):
-    """Captures model training metadata and logs them to Neptune. 
+    """Captures model training metadata and logs them to Neptune.
 
     Goes over the `last_metrics` and `smooth_loss` after each batch and epoch
     and logs them to Neptune.
@@ -96,10 +96,10 @@ class NeptuneCallback(Callback):
         super().__init__()
 
         expect_not_an_experiment(run)
-        verify_type('run', run, Run)
-        verify_type('base_namespace', base_namespace, (str, type(None)))
+        verify_type("run", run, Run)
+        verify_type("base_namespace", base_namespace, (str, type(None)))
 
-        self._base_namespace = ''
+        self._base_namespace = ""
         if base_namespace:
             if base_namespace.endswith("/"):
                 self._base_namespace = base_namespace[:-1]
@@ -120,20 +120,20 @@ class NeptuneCallback(Callback):
 
         for metric, value in logs.items():
             try:
-                if metric in ('batch', 'size') or metric.startswith('val_'):
+                if metric in ("batch", "size") or metric.startswith("val_"):
                     continue
                 logger[metric].log(value)
             except NeptuneException:
                 pass
 
     def on_train_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
-        self._log_metrics(logs, 'train', 'batch')
+        self._log_metrics(logs, "train", "batch")
 
     def on_epoch_end(self, epoch, logs=None):  # pylint:disable=unused-argument
-        self._log_metrics(logs, 'train', 'epoch')
+        self._log_metrics(logs, "train", "epoch")
 
     def on_test_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
-        self._log_metrics(logs, 'test', 'batch')
+        self._log_metrics(logs, "test", "batch")
 
     def on_test_end(self, logs=None):
-        self._log_metrics(logs, 'test', 'epoch')
+        self._log_metrics(logs, "test", "epoch")
