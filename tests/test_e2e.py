@@ -31,9 +31,6 @@ def test_smoke(dataset, model):
 
     base_dir = "metrics/training"
 
-    assert run.exists("metrics")
-    assert run.exists(f"{base_dir}/train")
-
     for subset in ["train", "test"]:
         for granularity in ["batch", "epoch"]:
             assert run.exists(f"{base_dir}/{subset}/{granularity}")
