@@ -21,17 +21,23 @@ def test_smoke(dataset, model):
 
     (x_train, y_train), (x_test, y_test) = dataset
 
-    model.fit(x_train, y_train, epochs=5, callbacks=[callback])
+    model.fit(
+        x_train,
+        y_train,
+        epochs=5,
+        callbacks=[callback],
+        validation_data=(x_test, y_test),
+    )
+
+    base_dir = "metrics/training"
 
     assert run.exists("metrics")
-    assert run.exists("metrics/train")
+    assert run.exists(f"{base_dir}/train")
 
-    assert run.exists("metrics/train/batch")
-    assert run.exists("metrics/train/batch/accuracy")
-    assert run.exists("metrics/train/batch/loss")
+    for subset in ["train", "test"]:
+        for kind in ["batch", "epoch"]:
+            assert run.exists(f"{base_dir}/{subset}/{kind}")
+            assert run.exists(f"{base_dir}/{subset}/{kind}/accuracy")
+            assert run.exists(f"{base_dir}/{subset}/{kind}/loss")
 
-    assert run.exists("metrics/train/epoch")
-    assert run.exists("metrics/train/epoch/accuracy")
-    assert run.exists("metrics/train/epoch/loss")
-
-    assert run.exists("metrics/training/model/summary")
+    assert run.exists(f"{base_dir}/model/summary")

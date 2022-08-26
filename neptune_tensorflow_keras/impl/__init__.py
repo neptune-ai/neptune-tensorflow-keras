@@ -119,7 +119,7 @@ class NeptuneCallback(Callback):
         if not logs:
             return
 
-        logger = self._metric_logger[category][trigger]
+        logger = self._metric_logger["training"][category][trigger]
 
         for metric, value in logs.items():
             try:
@@ -141,11 +141,11 @@ class NeptuneCallback(Callback):
     def on_test_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
         self._log_metrics(logs, "test", "batch")
 
-    def on_test_end(self, logs=None):
+    def on_test_end(self, logs=None):  # pylint:disable=unused-argument
         self._log_metrics(logs, "test", "epoch")
 
 
 def _model_summary_file(model) -> File:
     stream = io.StringIO()
-    model.summary(print_fn=lambda x: stream.write(x + r'\n'))
-    return File.from_stream(stream, extension='txt')
+    model.summary(print_fn=lambda x: stream.write(x + r"\n"))
+    return File.from_stream(stream, extension="txt")
