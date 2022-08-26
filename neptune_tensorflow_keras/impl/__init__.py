@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+import tempfile
+from contextlib import redirect_stdout
 from typing import Optional
 
 # Note: we purposefully try to import `tensorflow.keras.callbacks.Callback`
@@ -28,7 +30,7 @@ except ImportError:
         from keras.callbacks import Callback
     except ImportError:
         msg = """
-        keras package not found. 
+        keras package not found.
 
         As Keras is now part of Tensorflow you should install it by running
             pip install tensorflow"""
@@ -40,12 +42,14 @@ try:
     from neptune.new.exceptions import NeptuneException
     from neptune.new.internal.utils import verify_type
     from neptune.new.internal.utils.compatibility import expect_not_an_experiment
+    from neptune.new.types import File
 except ImportError:
     # neptune-client>=1.0.0 package structure
     from neptune import Run
     from neptune.exceptions import NeptuneException
     from neptune.internal.utils import verify_type
     from neptune.internal.utils.compatibility import expect_not_an_experiment
+    from neptune.types import File
 
 from neptune_tensorflow_keras import __version__
 
@@ -126,6 +130,9 @@ class NeptuneCallback(Callback):
             except NeptuneException:
                 pass
 
+    def on_train_begin(self, logs=None):  # pylint:disable=unused-argument
+        self._metric_logger["training/model/summary"] = _model_summary_file(self.model)
+
     def on_train_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
         self._log_metrics(logs, "train", "batch")
 
@@ -137,3 +144,11 @@ class NeptuneCallback(Callback):
 
     def on_test_end(self, logs=None):
         self._log_metrics(logs, "test", "epoch")
+
+
+def _model_summary_file(model) -> File:
+    tmp = tempfile.NamedTemporaryFile(delete=False)
+    with open(tmp.name, "w") as f:
+        with redirect_stdout(f):
+            model.summary()
+    return File(tmp.name, extension="txt")
