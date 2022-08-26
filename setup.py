@@ -10,6 +10,11 @@ def main():
         readme = readme_file.read()
 
     extras = {
+        "dev": [
+            "pre-commit",
+            "pytest>=5.0",
+            "pytest-cov==2.10.1",
+        ]
     }
 
     all_deps = []
@@ -17,7 +22,10 @@ def main():
         all_deps += extras[group_name]
     extras['all'] = all_deps
 
-    base_libs = ['neptune-client>=0.10.0']
+    base_libs = [
+        'neptune-client>=0.10.0',
+        "tensorflow>2.0.0",
+    ]
 
     version = None
     if os.path.exists('PKG-INFO'):
