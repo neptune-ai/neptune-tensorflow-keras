@@ -16,9 +16,6 @@ except ImportError:
     from neptune import init_run
 
 
-WAIT_FOR_LEADERBOARD = 15
-
-
 def test_smoke(dataset, model):
     run = init_run()
     callback = NeptuneCallback(run=run, base_namespace='metrics')
