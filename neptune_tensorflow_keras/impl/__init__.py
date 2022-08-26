@@ -147,5 +147,5 @@ class NeptuneCallback(Callback):
 
 def _model_summary_file(model) -> File:
     stream = io.StringIO()
-    model.summary(print_fn=lambda x: stream.write(x + r'\n'))
+    model.summary(print_fn=lambda x: stream.write(x + '\n'))
     return File.from_stream(stream, extension='txt')
