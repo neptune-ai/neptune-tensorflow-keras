@@ -14,8 +14,7 @@
 # limitations under the License.
 #
 
-import tempfile
-from contextlib import redirect_stdout
+import io
 from typing import Optional
 
 # Note: we purposefully try to import `tensorflow.keras.callbacks.Callback`
@@ -147,8 +146,6 @@ class NeptuneCallback(Callback):
 
 
 def _model_summary_file(model) -> File:
-    tmp = tempfile.NamedTemporaryFile(delete=False)
-    with open(tmp.name, "w") as f:
-        with redirect_stdout(f):
-            model.summary()
-    return File(tmp.name, extension="txt")
+    stream = io.StringIO()
+    model.summary(print_fn=lambda x: stream.write(x + r'\n'))
+    return File.from_stream(stream, extension='txt')
