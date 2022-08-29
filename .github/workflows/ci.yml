@@ -1,4 +1,4 @@
-name: neptune-ai/tensorflow-keras
+name: tensorflow-keras
 on: [push]
 jobs:
   pre-commit:
