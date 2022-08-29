@@ -1,4 +1,4 @@
-name: neptune-prophet
+name: neptune-ai/tensorflow-keras
 on: [push]
 jobs:
   pre-commit:
