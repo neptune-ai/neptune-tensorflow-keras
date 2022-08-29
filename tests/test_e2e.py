@@ -18,8 +18,8 @@ except ImportError:
 def test_smoke(dataset, model):
     run = init_run()
 
-    base_namespace = "training"
-    callback = NeptuneCallback(run=run, base_namespace=base_namespace)
+
+    callback = NeptuneCallback(run=run)
 
     (x_train, y_train), (x_test, y_test) = dataset
 
@@ -30,6 +30,8 @@ def test_smoke(dataset, model):
         callbacks=[callback],
         validation_data=(x_test, y_test),
     )
+
+    base_namespace = "training"
 
     for subset in ["train", "test"]:
         for granularity in ["batch", "epoch"]:

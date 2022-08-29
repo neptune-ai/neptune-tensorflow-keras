@@ -95,23 +95,19 @@ class NeptuneCallback(Callback):
         You need to have Keras or Tensorflow 2 installed on your computer to use this module.
     """
 
-    def __init__(self, run: Run, base_namespace: Optional[str] = None):
+    def __init__(self, run: Run, base_namespace: str = "training"):
         super().__init__()
 
         expect_not_an_experiment(run)
         verify_type("run", run, Run)
         verify_type("base_namespace", base_namespace, (str, type(None)))
 
-        self._base_namespace = ""
-        if base_namespace:
-            if base_namespace.endswith("/"):
-                self._base_namespace = base_namespace[:-1]
-            else:
-                self._base_namespace = base_namespace
-        if self._base_namespace:
-            self._metric_logger = run[self._base_namespace]
+        if base_namespace.endswith("/"):
+            self._base_namespace = base_namespace[:-1]
         else:
-            self._metric_logger = run
+            self._base_namespace = base_namespace
+
+        self._metric_logger = run[self._base_namespace]
 
         run[INTEGRATION_VERSION_KEY] = __version__
 
