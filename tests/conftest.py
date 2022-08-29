@@ -8,7 +8,7 @@ def dataset():
     mnist = tf.keras.datasets.mnist
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
     x_train, x_test = x_train / 255.0, x_test / 255.0
-    yield (x_train, y_train), (x_test, y_test)
+    return (x_train, y_train), (x_test, y_test)
 
 
 @pytest.fixture(scope="session")
@@ -27,4 +27,4 @@ def model():
         loss=loss_fn,
         metrics=["accuracy"],
     )
-    yield model
+    return model

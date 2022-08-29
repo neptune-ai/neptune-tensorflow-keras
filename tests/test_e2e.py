@@ -24,9 +24,6 @@ def test_smoke(dataset, model):
 
     model.fit(x_train, y_train, epochs=5, callbacks=[callback])
 
-    assert run.exists("metrics")
-    assert run.exists("metrics/train")
-
     assert run.exists("metrics/train/batch")
     assert run.exists("metrics/train/batch/accuracy")
     assert run.exists("metrics/train/batch/loss")
