@@ -17,7 +17,9 @@ except ImportError:
 
 def test_smoke(dataset, model):
     run = init_run()
-    callback = NeptuneCallback(run=run, base_namespace="metrics")
+
+    base_namespace = "training"
+    callback = NeptuneCallback(run=run, base_namespace=base_namespace)
 
     (x_train, y_train), (x_test, y_test) = dataset
 
@@ -29,12 +31,10 @@ def test_smoke(dataset, model):
         validation_data=(x_test, y_test),
     )
 
-    base_dir = "metrics/training"
-
     for subset in ["train", "test"]:
         for granularity in ["batch", "epoch"]:
-            assert run.exists(f"{base_dir}/{subset}/{granularity}")
-            assert run.exists(f"{base_dir}/{subset}/{granularity}/accuracy")
-            assert run.exists(f"{base_dir}/{subset}/{granularity}/loss")
+            assert run.exists(f"{base_namespace}/{subset}/{granularity}")
+            assert run.exists(f"{base_namespace}/{subset}/{granularity}/accuracy")
+            assert run.exists(f"{base_namespace}/{subset}/{granularity}/loss")
 
-    assert run.exists(f"{base_dir}/model/summary")
+    assert run.exists(f"{base_namespace}/model/summary")
