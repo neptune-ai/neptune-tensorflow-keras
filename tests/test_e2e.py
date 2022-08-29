@@ -18,7 +18,6 @@ except ImportError:
 def test_smoke(dataset, model):
     run = init_run()
 
-
     callback = NeptuneCallback(run=run)
 
     (x_train, y_train), (x_test, y_test) = dataset
