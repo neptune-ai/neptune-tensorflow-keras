@@ -1,7 +1,3 @@
-import json
-import tempfile
-import time
-from pathlib import Path
 
 import pytest
 
@@ -15,10 +11,11 @@ except ImportError:
     from neptune import init_run
 
 
-def test_smoke(dataset, model):
+@pytest.mark.parametrize("log_model_diagram", [True, False])
+def test_smoke(dataset, model, log_model_diagram):
     run = init_run()
 
-    callback = NeptuneCallback(run=run)
+    callback = NeptuneCallback(run=run, log_model_diagram=log_model_diagram)
 
     (x_train, y_train), (x_test, y_test) = dataset
 
@@ -39,3 +36,9 @@ def test_smoke(dataset, model):
             assert run.exists(f"{base_namespace}/{subset}/{granularity}/loss")
 
     assert run.exists(f"{base_namespace}/model/summary")
+
+    if log_model_diagram:
+        assert run.exists(f"{base_namespace}/model/visualization")
+        assert run[f"{base_namespace}/model/visualization"].fetch_extension() == "png"
+    else:
+        assert not run.exists(f"{base_namespace}/model/visualization")
