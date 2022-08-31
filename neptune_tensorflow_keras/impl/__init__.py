@@ -70,6 +70,9 @@ class NeptuneCallback(Callback):
             Neptune run, required.
         base_namespace: str, optional:
             Namespace under which all metadata logged by the NeptuneCallback will be stored.
+        log_model_diagram: bool = False
+            Save the model visualization. It requires pydot installed, otherwise it will silently skip saving
+            the diagram.
 
     Example:
 
@@ -101,7 +104,7 @@ class NeptuneCallback(Callback):
         self,
         run: Run,
         base_namespace: str = "training",
-        log_model_diagram: bool = False,  # FIXME: update docstring
+        log_model_diagram: bool = False,
     ):
         super().__init__()
 
