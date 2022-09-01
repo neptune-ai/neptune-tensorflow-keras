@@ -6,6 +6,7 @@
   to keep the metadata better organized. `None` is not accepted anymore as a value of the argument.
 - We are additionally saving the model summary.
 - We fixed the dependencies for TensorFlow to version >= 2.0.0.
+- We are logging the arguments passed to the `Model.fit` method from Keras.
 
 ## neptune-tensorflow-keras 0.9.9
 
