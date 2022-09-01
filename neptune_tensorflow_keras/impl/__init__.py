@@ -15,6 +15,7 @@
 #
 
 import io
+import io
 from typing import Optional
 
 # Note: we purposefully try to import `tensorflow.keras.callbacks.Callback`
@@ -42,12 +43,14 @@ try:
     from neptune.new.internal.utils import verify_type
     from neptune.new.internal.utils.compatibility import expect_not_an_experiment
     from neptune.new.types import File
+    from neptune.new.types import File
 except ImportError:
     # neptune-client>=1.0.0 package structure
     from neptune import Run
     from neptune.exceptions import NeptuneException
     from neptune.internal.utils import verify_type
     from neptune.internal.utils.compatibility import expect_not_an_experiment
+    from neptune.types import File
     from neptune.types import File
 
 from neptune_tensorflow_keras import __version__
