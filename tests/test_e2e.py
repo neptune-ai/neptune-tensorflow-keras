@@ -40,6 +40,6 @@ def test_smoke(dataset, model):
 
     assert run.exists(f"{base_namespace}/model/summary")
 
-    assert run.exists(f"{base_namespace}/model/fit_params")
-    assert run.exists(f"{base_namespace}/model/fit_params/epochs")
-    assert run[f"{base_namespace}/model/fit_params/epochs"].fetch() == 5
+    assert run.exists(f"{base_namespace}/fit_params")
+    assert run.exists(f"{base_namespace}/fit_params/epochs")
+    assert run[f"{base_namespace}/fit_params/epochs"].fetch() == 5
