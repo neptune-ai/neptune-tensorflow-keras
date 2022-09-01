@@ -48,7 +48,6 @@ except ImportError:
     from neptune.internal.utils import verify_type
     from neptune.internal.utils.compatibility import expect_not_an_experiment
     from neptune.types import File
-    from neptune.types import File
 
 from neptune_tensorflow_keras import __version__
 
