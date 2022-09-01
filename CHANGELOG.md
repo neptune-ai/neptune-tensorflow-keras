@@ -6,6 +6,8 @@
   to keep the metadata better organized. `None` is not accepted anymore as a value of the argument.
 - We are additionally saving the model summary.
 - We fixed the dependencies for TensorFlow to version >= 2.0.0.
+- You can use the `log_model_diagram=True` flag to save the model visualization produced by `model_to_dot` and
+  `plot_model` by Keras.
 
 ## neptune-tensorflow-keras 0.9.9
 
