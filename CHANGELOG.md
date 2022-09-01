@@ -1,3 +1,12 @@
+## neptune-tensorflow-keras 1.0.0
+
+### Changes
+
+- `NeptuneCallback` now logs everything according to the `base_namespace` argument that defaults to `training` for
+  to keep the metadata better organized.
+- We are additionally saving the model summary.
+- We fixed the dependencies for TensorFlow to version >= 2.0.0.
+
 ## neptune-tensorflow-keras 0.9.9
 
 ### Features
