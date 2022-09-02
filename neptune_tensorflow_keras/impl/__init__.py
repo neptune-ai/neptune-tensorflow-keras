@@ -68,6 +68,8 @@ class NeptuneCallback(Callback):
             Neptune run, required.
         base_namespace: str, optional:
             Namespace under which all metadata logged by the NeptuneCallback will be stored.
+        log_on_batch: bool:
+            Log the metrics also for each batch, not only each epoch.
 
     Example:
 
