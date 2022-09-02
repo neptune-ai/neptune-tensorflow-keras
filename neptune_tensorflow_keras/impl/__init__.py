@@ -95,7 +95,12 @@ class NeptuneCallback(Callback):
         You need to have Keras or Tensorflow 2 installed on your computer to use this module.
     """
 
-    def __init__(self, run: Run, base_namespace: str = "training", log_on_batch: bool = False,):
+    def __init__(
+        self,
+        run: Run,
+        base_namespace: str = "training",
+        log_on_batch: bool = False,
+    ):
         super().__init__()
 
         expect_not_an_experiment(run)
