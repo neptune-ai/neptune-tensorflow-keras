@@ -95,12 +95,14 @@ class NeptuneCallback(Callback):
         You need to have Keras or Tensorflow 2 installed on your computer to use this module.
     """
 
-    def __init__(self, run: Run, base_namespace: str = "training"):
+    def __init__(self, run: Run, base_namespace: str = "training", log_on_batch: bool = False,):
         super().__init__()
 
         expect_not_an_experiment(run)
         verify_type("run", run, Run)
         verify_type("base_namespace", base_namespace, (str, type(None)))
+
+        self.log_on_batch = log_on_batch
 
         if base_namespace.endswith("/"):
             self._base_namespace = base_namespace[:-1]
@@ -129,13 +131,15 @@ class NeptuneCallback(Callback):
         self._metric_logger["model/summary"] = _model_summary_file(self.model)
 
     def on_train_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
-        self._log_metrics(logs, "train", "batch")
+        if self.log_on_batch:
+            self._log_metrics(logs, "train", "batch")
 
     def on_epoch_end(self, epoch, logs=None):  # pylint:disable=unused-argument
         self._log_metrics(logs, "train", "epoch")
 
     def on_test_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
-        self._log_metrics(logs, "test", "batch")
+        if self.log_on_batch:
+            self._log_metrics(logs, "test", "batch")
 
     def on_test_end(self, logs=None):  # pylint:disable=unused-argument
         self._log_metrics(logs, "test", "epoch")

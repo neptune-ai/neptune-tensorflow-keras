@@ -15,10 +15,11 @@ except ImportError:
     from neptune import init_run
 
 
-def test_smoke(dataset, model):
+@pytest.mark.parametrize("log_on_batch", [True, False])
+def test_smoke(dataset, model, log_on_batch):
     run = init_run()
 
-    callback = NeptuneCallback(run=run)
+    callback = NeptuneCallback(run=run, log_on_batch=log_on_batch)
 
     (x_train, y_train), (x_test, y_test) = dataset
 
@@ -34,8 +35,11 @@ def test_smoke(dataset, model):
 
     for subset in ["train", "test"]:
         for granularity in ["batch", "epoch"]:
-            assert run.exists(f"{base_namespace}/{subset}/{granularity}")
-            assert run.exists(f"{base_namespace}/{subset}/{granularity}/accuracy")
-            assert run.exists(f"{base_namespace}/{subset}/{granularity}/loss")
+            if granularity == "batch" and not log_on_batch:
+                assert not run.exists(f"{base_namespace}/{subset}/{granularity}")
+            else:
+                assert run.exists(f"{base_namespace}/{subset}/{granularity}")
+                assert run.exists(f"{base_namespace}/{subset}/{granularity}/accuracy")
+                assert run.exists(f"{base_namespace}/{subset}/{granularity}/loss")
 
     assert run.exists(f"{base_namespace}/model/summary")
