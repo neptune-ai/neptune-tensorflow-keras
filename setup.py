@@ -14,6 +14,7 @@ def main():
             "pre-commit",
             "pytest>=5.0",
             "pytest-cov==2.10.1",
+            "pydot",
         ]
     }
 
