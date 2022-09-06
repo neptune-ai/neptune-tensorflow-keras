@@ -12,7 +12,7 @@ except ImportError:
 
 
 @pytest.mark.parametrize("log_model_diagram", [True, False])
-def test_smoke(dataset, model, log_model_diagram):
+def test_e2e(dataset, model, log_model_diagram):
     run = init_run()
 
     callback = NeptuneCallback(run=run, log_model_diagram=log_model_diagram)
