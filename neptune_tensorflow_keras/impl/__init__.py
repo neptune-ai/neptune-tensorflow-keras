@@ -108,13 +108,13 @@ class NeptuneCallback(Callback):
     ):
         super().__init__()
 
-        self.log_model_diagram = log_model_diagram
-
         expect_not_an_experiment(run)
         verify_type("run", run, Run)
         verify_type("base_namespace", base_namespace, (str, type(None)))
+        verify_type("log_model_diagram", log_model_diagram, bool)
 
         self._run = run
+        self._log_model_diagram = log_model_diagram
 
         if base_namespace.endswith("/"):
             self._base_namespace = base_namespace[:-1]
@@ -148,7 +148,7 @@ class NeptuneCallback(Callback):
     def on_train_begin(self, logs=None):  # pylint:disable=unused-argument
         self._model_logger["summary"] = _model_summary_file(self.model)
 
-        if self.log_model_diagram:
+        if self._log_model_diagram:
             self._model_logger["visualization"] = _model_diagram(self.model)
 
     def on_train_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
