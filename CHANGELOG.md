@@ -15,10 +15,6 @@
 
 - We fixed the dependencies for TensorFlow to version >= 2.0.0. ([#14](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/14))
 
-### Added
-
-- We are logging the arguments passed to the `Model.fit` method from Keras ([#17](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/17))
-
 ## neptune-tensorflow-keras 0.9.9
 
 ### Features
