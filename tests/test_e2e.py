@@ -44,6 +44,10 @@ def test_e2e(dataset, model, log_model_diagram):
     npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/momentum"].fetch(), 0)
     assert run[f"{base_namespace}/model/optimizer_config/nesterov"].fetch() == False
 
+    assert run.exists(f"{base_namespace}/fit_params")
+    assert run.exists(f"{base_namespace}/fit_params/epochs")
+    assert run[f"{base_namespace}/fit_params/epochs"].fetch() == 5
+
     if log_model_diagram:
         assert run.exists(f"{base_namespace}/model/visualization")
         assert run[f"{base_namespace}/model/visualization"].fetch_extension() == "png"

@@ -148,6 +148,7 @@ class NeptuneCallback(Callback):
     def on_train_begin(self, logs=None):  # pylint:disable=unused-argument
         self._model_logger["summary"] = _model_summary_file(self.model)
         self._model_logger["optimizer_config"] = self.model.optimizer.get_config()  # it is a dict
+        self._metric_logger["fit_params"] = self.params
 
         if self._log_model_diagram:
             self._model_logger["visualization"] = _model_diagram(self.model)
