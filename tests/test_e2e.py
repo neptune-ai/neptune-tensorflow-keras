@@ -1,4 +1,5 @@
 import numpy.testing as npt
+import pytest
 
 from neptune_tensorflow_keras.impl import NeptuneCallback
 
