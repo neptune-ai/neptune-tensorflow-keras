@@ -5,6 +5,8 @@
 - We are additionally saving the model summary ([#14](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/14))
 - We are saving the parameters of the optimizer used for training the model ([#15](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/15))
 - We are saving the parameters passed to `Model.fit` during the training ([#17](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/17))
+- You can use the `log_model_diagram=True` flag to save the model visualization produced by `model_to_dot` and 
+  `plot_model` by Keras ([#16](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/16))
 
 ### Changes
 
@@ -14,11 +16,6 @@
 ### Fixes
 
 - We fixed the dependencies for TensorFlow to version >= 2.0.0. ([#14](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/14))
-
-### Added 
-
-- You can use the `log_model_diagram=True` flag to save the model visualization produced by `model_to_dot` and
-  `plot_model` by Keras ([#16](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/16))
 
 ## neptune-tensorflow-keras 0.9.9
 
