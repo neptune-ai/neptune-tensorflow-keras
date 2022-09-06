@@ -41,3 +41,7 @@ def test_smoke(dataset, model):
     npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/decay"].fetch(), 0)
     npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/momentum"].fetch(), 0)
     assert run[f"{base_namespace}/model/optimizer_config/nesterov"].fetch() == False
+
+    assert run.exists(f"{base_namespace}/fit_params")
+    assert run.exists(f"{base_namespace}/fit_params/epochs")
+    assert run[f"{base_namespace}/fit_params/epochs"].fetch() == 5
