@@ -1,3 +1,4 @@
+import numpy.testing as npt
 import pytest
 
 from neptune_tensorflow_keras.impl import NeptuneCallback
@@ -35,6 +36,13 @@ def test_smoke(dataset, model, log_model_diagram):
             assert run.exists(f"{base_namespace}/{subset}/{granularity}/loss")
 
     assert run.exists(f"{base_namespace}/model/summary")
+
+    assert run.exists(f"{base_namespace}/model/optimizer_config")
+    assert run[f"{base_namespace}/model/optimizer_config/name"].fetch() == "SGD"
+    npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/learning_rate"].fetch(), 0.01)
+    npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/decay"].fetch(), 0)
+    npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/momentum"].fetch(), 0)
+    assert run[f"{base_namespace}/model/optimizer_config/nesterov"].fetch() == False
 
     if log_model_diagram:
         assert run.exists(f"{base_namespace}/model/visualization")
