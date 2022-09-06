@@ -1,11 +1,18 @@
 ## neptune-tensorflow-keras 1.0.0
 
+### Added
+
+- We are additionally saving the model summary ([#14](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/14))
+- We are saving the parameters of the optimizer used for training the model ([#15](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/15))
+
 ### Changes
 
 - `NeptuneCallback` now logs everything according to the `base_namespace` argument that defaults to `training`
-  to keep the metadata better organized. `None` is not accepted anymore as a value of the argument.
-- We are additionally saving the model summary.
-- We fixed the dependencies for TensorFlow to version >= 2.0.0.
+  to keep the metadata better organized. `None` is not accepted anymore as a value of the argument ([#14](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/14))
+
+### Fixes
+
+- We fixed the dependencies for TensorFlow to version >= 2.0.0. ([#14](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/14))
 
 ### Added
 

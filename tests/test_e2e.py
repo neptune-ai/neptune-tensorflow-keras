@@ -1,9 +1,4 @@
-import json
-import tempfile
-import time
-from pathlib import Path
-
-import pytest
+import numpy.testing as npt
 
 from neptune_tensorflow_keras.impl import NeptuneCallback
 
@@ -39,6 +34,13 @@ def test_smoke(dataset, model):
             assert run.exists(f"{base_namespace}/{subset}/{granularity}/loss")
 
     assert run.exists(f"{base_namespace}/model/summary")
+
+    assert run.exists(f"{base_namespace}/model/optimizer_config")
+    assert run[f"{base_namespace}/model/optimizer_config/name"].fetch() == "SGD"
+    npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/learning_rate"].fetch(), 0.01)
+    npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/decay"].fetch(), 0)
+    npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/momentum"].fetch(), 0)
+    assert run[f"{base_namespace}/model/optimizer_config/nesterov"].fetch() == False
 
     assert run.exists(f"{base_namespace}/fit_params")
     assert run.exists(f"{base_namespace}/fit_params/epochs")
