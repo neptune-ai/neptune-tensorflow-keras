@@ -15,7 +15,6 @@
 #
 
 import io
-from typing import Optional
 
 # Note: we purposefully try to import `tensorflow.keras.callbacks.Callback`
 # before `keras.callbacks.Callback` because the former is compatible with both
@@ -136,6 +135,7 @@ class NeptuneCallback(Callback):
 
     def on_train_begin(self, logs=None):  # pylint:disable=unused-argument
         self._metric_logger["model/summary"] = _model_summary_file(self.model)
+        self._metric_logger["model/optimizer_config"] = self.model.optimizer.get_config()  # it is a dict
 
     def on_train_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
         if self.log_on_batch:
