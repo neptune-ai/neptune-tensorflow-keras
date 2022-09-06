@@ -15,6 +15,7 @@
 #
 
 import io
+import tempfile
 
 # Note: we purposefully try to import `tensorflow.keras.callbacks.Callback`
 # before `keras.callbacks.Callback` because the former is compatible with both
@@ -23,9 +24,11 @@ import io
 
 try:
     from tensorflow.keras.callbacks import Callback
+    from tensorflow.keras.utils import model_to_dot
 except ImportError:
     try:
         from keras.callbacks import Callback
+        from keras.utils import model_to_dot
     except ImportError:
         msg = """
         keras package not found.
@@ -69,6 +72,9 @@ class NeptuneCallback(Callback):
             Namespace under which all metadata logged by the NeptuneCallback will be stored.
         log_on_batch: bool:
             Log the metrics also for each batch, not only each epoch.
+        log_model_diagram: bool = False
+            Save the model visualization. It requires pydot installed, otherwise it will silently skip saving
+            the diagram.
 
     Example:
 
@@ -100,6 +106,7 @@ class NeptuneCallback(Callback):
         self,
         run: Run,
         base_namespace: str = "training",
+        log_model_diagram: bool = False,
         log_on_batch: bool = False,
     ):
         super().__init__()
@@ -107,6 +114,10 @@ class NeptuneCallback(Callback):
         expect_not_an_experiment(run)
         verify_type("run", run, Run)
         verify_type("base_namespace", base_namespace, (str, type(None)))
+        verify_type("log_model_diagram", log_model_diagram, bool)
+
+        self._run = run
+        self._log_model_diagram = log_model_diagram
 
         self.log_on_batch = log_on_batch
 
@@ -115,9 +126,15 @@ class NeptuneCallback(Callback):
         else:
             self._base_namespace = base_namespace
 
-        self._metric_logger = run[self._base_namespace]
+        self._run[INTEGRATION_VERSION_KEY] = __version__
 
-        run[INTEGRATION_VERSION_KEY] = __version__
+    @property
+    def _metric_logger(self):
+        return self._run[self._base_namespace]
+
+    @property
+    def _model_logger(self):
+        return self._run[self._base_namespace]["model"]
 
     def _log_metrics(self, logs, category: str, trigger: str):
         if not logs:
@@ -134,8 +151,12 @@ class NeptuneCallback(Callback):
                 pass
 
     def on_train_begin(self, logs=None):  # pylint:disable=unused-argument
-        self._metric_logger["model/summary"] = _model_summary_file(self.model)
-        self._metric_logger["model/optimizer_config"] = self.model.optimizer.get_config()  # it is a dict
+        self._model_logger["summary"] = _model_summary_file(self.model)
+        self._model_logger["optimizer_config"] = self.model.optimizer.get_config()  # it is a dict
+        self._metric_logger["fit_params"] = self.params
+
+        if self._log_model_diagram:
+            self._model_logger["visualization"] = _model_diagram(self.model)
 
     def on_train_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
         if self.log_on_batch:
@@ -156,3 +177,13 @@ def _model_summary_file(model) -> File:
     stream = io.StringIO()
     model.summary(print_fn=lambda x: stream.write(x + "\n"))
     return File.from_stream(stream, extension="txt")
+
+
+def _model_diagram(model) -> File:
+    dot = model_to_dot(model)
+    if dot is not None:
+        # the same as TF/Keras does, we will fail with ImportError unless using a notebook,
+        # where it just prints a warning message
+        tmp = tempfile.NamedTemporaryFile(delete=False)
+        dot.write(tmp.name, format="png")
+        return File(tmp.name, extension="png")

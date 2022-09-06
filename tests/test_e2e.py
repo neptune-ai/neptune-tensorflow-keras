@@ -11,11 +11,12 @@ except ImportError:
     from neptune import init_run
 
 
+@pytest.mark.parametrize("log_model_diagram", [True, False])
 @pytest.mark.parametrize("log_on_batch", [True, False])
-def test_smoke(dataset, model, log_on_batch):
+def test_e2e(dataset, model, log_model_diagram, log_on_batch):
     run = init_run()
 
-    callback = NeptuneCallback(run=run, log_on_batch=log_on_batch)
+    callback = NeptuneCallback(run=run, log_model_diagram=log_model_diagram, log_on_batch=log_on_batch)
 
     (x_train, y_train), (x_test, y_test) = dataset
 
@@ -46,3 +47,13 @@ def test_smoke(dataset, model, log_on_batch):
     npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/decay"].fetch(), 0)
     npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/momentum"].fetch(), 0)
     assert run[f"{base_namespace}/model/optimizer_config/nesterov"].fetch() == False
+
+    assert run.exists(f"{base_namespace}/fit_params")
+    assert run.exists(f"{base_namespace}/fit_params/epochs")
+    assert run[f"{base_namespace}/fit_params/epochs"].fetch() == 5
+
+    if log_model_diagram:
+        assert run.exists(f"{base_namespace}/model/visualization")
+        assert run[f"{base_namespace}/model/visualization"].fetch_extension() == "png"
+    else:
+        assert not run.exists(f"{base_namespace}/model/visualization")
