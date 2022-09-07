@@ -70,6 +70,8 @@ class NeptuneCallback(Callback):
             Neptune run, required.
         base_namespace: str, optional:
             Namespace under which all metadata logged by the NeptuneCallback will be stored.
+        log_on_batch: bool:
+            Log the metrics also for each batch, not only each epoch.
         log_model_diagram: bool = False
             Save the model visualization. It requires pydot installed, otherwise it will silently skip saving
             the diagram.
@@ -105,6 +107,7 @@ class NeptuneCallback(Callback):
         run: Run,
         base_namespace: str = "training",
         log_model_diagram: bool = False,
+        log_on_batch: bool = False,
     ):
         super().__init__()
 
@@ -115,6 +118,8 @@ class NeptuneCallback(Callback):
 
         self._run = run
         self._log_model_diagram = log_model_diagram
+
+        self.log_on_batch = log_on_batch
 
         if base_namespace.endswith("/"):
             self._base_namespace = base_namespace[:-1]
@@ -154,7 +159,8 @@ class NeptuneCallback(Callback):
             self._model_logger["visualization"] = _model_diagram(self.model)
 
     def on_train_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
-        self._log_metrics(logs, "train", "batch")
+        if self.log_on_batch:
+            self._log_metrics(logs, "train", "batch")
 
     def on_epoch_begin(self, epoch, logs=None):  # pylint:disable=unused-argument
         self._model_logger['learning_rate'].log(self.model.optimizer.learning_rate)
@@ -163,7 +169,8 @@ class NeptuneCallback(Callback):
         self._log_metrics(logs, "train", "epoch")
 
     def on_test_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
-        self._log_metrics(logs, "test", "batch")
+        if self.log_on_batch:
+            self._log_metrics(logs, "test", "batch")
 
     def on_test_end(self, logs=None):  # pylint:disable=unused-argument
         self._log_metrics(logs, "test", "epoch")

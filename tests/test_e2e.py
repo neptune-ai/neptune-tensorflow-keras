@@ -12,10 +12,11 @@ except ImportError:
 
 
 @pytest.mark.parametrize("log_model_diagram", [True, False])
-def test_e2e(dataset, model, log_model_diagram):
+@pytest.mark.parametrize("log_on_batch", [True, False])
+def test_e2e(dataset, model, log_model_diagram, log_on_batch):
     run = init_run()
 
-    callback = NeptuneCallback(run=run, log_model_diagram=log_model_diagram)
+    callback = NeptuneCallback(run=run, log_model_diagram=log_model_diagram, log_on_batch=log_on_batch)
 
     (x_train, y_train), (x_test, y_test) = dataset
 
@@ -31,9 +32,12 @@ def test_e2e(dataset, model, log_model_diagram):
 
     for subset in ["train", "test"]:
         for granularity in ["batch", "epoch"]:
-            assert run.exists(f"{base_namespace}/{subset}/{granularity}")
-            assert run.exists(f"{base_namespace}/{subset}/{granularity}/accuracy")
-            assert run.exists(f"{base_namespace}/{subset}/{granularity}/loss")
+            if granularity == "batch" and not log_on_batch:
+                assert not run.exists(f"{base_namespace}/{subset}/{granularity}")
+            else:
+                assert run.exists(f"{base_namespace}/{subset}/{granularity}")
+                assert run.exists(f"{base_namespace}/{subset}/{granularity}/accuracy")
+                assert run.exists(f"{base_namespace}/{subset}/{granularity}/loss")
 
     assert run.exists(f"{base_namespace}/model/summary")
     assert run.exists(f"{base_namespace}/model/learning_rate")
