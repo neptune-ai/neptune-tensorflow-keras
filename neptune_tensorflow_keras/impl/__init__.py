@@ -156,6 +156,9 @@ class NeptuneCallback(Callback):
     def on_train_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
         self._log_metrics(logs, "train", "batch")
 
+    def on_epoch_begin(self, epoch, logs=None):  # pylint:disable=unused-argument
+        self._model_logger['learning_rate'].log(self.model.optimizer.learning_rate)
+
     def on_epoch_end(self, epoch, logs=None):  # pylint:disable=unused-argument
         self._log_metrics(logs, "train", "epoch")
 

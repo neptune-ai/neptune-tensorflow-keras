@@ -36,6 +36,7 @@ def test_e2e(dataset, model, log_model_diagram):
             assert run.exists(f"{base_namespace}/{subset}/{granularity}/loss")
 
     assert run.exists(f"{base_namespace}/model/summary")
+    assert run.exists(f"{base_namespace}/model/learning_rate")
 
     assert run.exists(f"{base_namespace}/model/optimizer_config")
     assert run[f"{base_namespace}/model/optimizer_config/name"].fetch() == "SGD"
