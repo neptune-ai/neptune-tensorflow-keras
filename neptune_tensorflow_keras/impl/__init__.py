@@ -144,7 +144,7 @@ class NeptuneCallback(Callback):
 
         for metric, value in logs.items():
             try:
-                if metric in ("batch", "size") or metric.startswith("val_"):
+                if metric in ("batch", "size"):
                     continue
                 logger[metric].log(value)
             except NeptuneException:
