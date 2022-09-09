@@ -1,3 +1,9 @@
+## neptune-tensorflow-keras 1.0.1
+
+### Changes
+
+- Changed integrations utils to be imported from non-internal package ([#19](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/19))
+
 ## neptune-tensorflow-keras 1.0.0
 
 ### Added

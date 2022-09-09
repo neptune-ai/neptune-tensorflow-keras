@@ -24,7 +24,7 @@ def main():
     extras["all"] = all_deps
 
     base_libs = [
-        "neptune-client>=0.10.0",
+        "neptune-client>=0.16.7",
         "tensorflow>2.0.0",
     ]
 
