@@ -1,10 +1,4 @@
-## neptune-tensorflow-keras 1.0.1
-
-### Changes
-
-- Changed integrations utils to be imported from non-internal package ([#24](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/24))
-
-## neptune-tensorflow-keras 1.0.0
+## [UNRELEASED] neptune-tensorflow-keras 1.0.0
 
 ### Added
 
@@ -17,6 +11,7 @@
 
 ### Changes
 
+- Changed integrations utils to be imported from non-internal package ([#24](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/24))
 - `NeptuneCallback` now logs everything according to the `base_namespace` argument that defaults to `training`
   to keep the metadata better organized. `None` is not accepted anymore as a value of the argument ([#14](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/14))
 - Logging the batch metrics is now optional with the `log_on_batch` flag that defaults to False ([#19](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/19))
