@@ -30,7 +30,7 @@ def test_e2e(dataset, model, log_model_diagram, log_on_batch):
 
     base_namespace = "training"
 
-    for subset in ["train", "test"]:
+    for subset in ["train", "validation"]:
         for granularity in ["batch", "epoch"]:
             if granularity == "batch" and not log_on_batch:
                 assert not run.exists(f"{base_namespace}/{subset}/{granularity}")
