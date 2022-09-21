@@ -117,7 +117,7 @@ class NeptuneCallback(Callback):
         self._run = run
         self._log_model_diagram = log_model_diagram
 
-        self.log_on_batch = log_on_batch
+        self._log_on_batch = log_on_batch
 
         if base_namespace.endswith("/"):
             self._base_namespace = base_namespace[:-1]
@@ -157,7 +157,7 @@ class NeptuneCallback(Callback):
             self._model_logger["visualization"] = _model_diagram(self.model)
 
     def on_train_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
-        if self.log_on_batch:
+        if self._log_on_batch:
             self._log_metrics(logs, "train", "batch")
 
     def on_epoch_begin(self, epoch, logs=None):  # pylint:disable=unused-argument
@@ -167,7 +167,7 @@ class NeptuneCallback(Callback):
         self._log_metrics(logs, "train", "epoch")
 
     def on_test_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
-        if self.log_on_batch:
+        if self._log_on_batch:
             self._log_metrics(logs, "validation", "batch")
 
     def on_test_end(self, logs=None):  # pylint:disable=unused-argument
