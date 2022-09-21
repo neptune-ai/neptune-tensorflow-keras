@@ -15,6 +15,8 @@
 - `NeptuneCallback` now logs everything according to the `base_namespace` argument that defaults to `training`
   to keep the metadata better organized. `None` is not accepted anymore as a value of the argument ([#14](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/14))
 - Logging the batch metrics is now optional with the `log_on_batch` flag that defaults to False ([#19](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/19))
+- We changed the names of the logging directories from "test" to "validation" to be consistent with the naming
+  convention used by Keras ([#26](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/26))
 
 ### Fixes
 

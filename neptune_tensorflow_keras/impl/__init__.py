@@ -168,10 +168,10 @@ class NeptuneCallback(Callback):
 
     def on_test_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
         if self.log_on_batch:
-            self._log_metrics(logs, "test", "batch")
+            self._log_metrics(logs, "validation", "batch")
 
     def on_test_end(self, logs=None):  # pylint:disable=unused-argument
-        self._log_metrics(logs, "test", "epoch")
+        self._log_metrics(logs, "validation", "epoch")
 
 
 def _model_summary_file(model) -> File:
