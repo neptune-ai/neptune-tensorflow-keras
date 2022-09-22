@@ -1,4 +1,4 @@
-## [UNRELEASED] neptune-tensorflow-keras 1.0.0
+## neptune-tensorflow-keras 1.0.0
 
 ### Added
 
