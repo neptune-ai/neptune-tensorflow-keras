@@ -58,9 +58,6 @@ INTEGRATION_VERSION_KEY = "source_code/integrations/neptune-tensorflow-keras"
 class NeptuneCallback(Callback):
     """Captures model training metadata and logs them to Neptune.
 
-    Goes over the `last_metrics` and `smooth_loss` after each batch and epoch
-    and logs them to Neptune.
-
     See the example run here https://ui.neptune.ai/shared/keras-integration/e/KERAS-23/logs
 
     Args:
