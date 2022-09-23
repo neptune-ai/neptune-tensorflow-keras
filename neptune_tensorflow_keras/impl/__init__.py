@@ -61,11 +61,11 @@ class NeptuneCallback(Callback):
     See the example run here https://ui.neptune.ai/shared/keras-integration/e/KERAS-23/logs
 
     Args:
-        run (`neptune.new.Run`): Neptune run.
-        base_namespace (`str`, optional): Namespace (folder) under which all metadata
+        run: Neptune run.
+        base_namespace: Namespace (folder) under which all metadata
             logged by the NeptuneCallback will be stored. Defaults to "training".
-        log_on_batch (`bool`): Log the metrics also for each batch, not only each epoch.
-        log_model_diagram (`bool`): Save the model visualization. Defaults to False.
+        log_on_batch: Log the metrics also for each batch, not only each epoch.
+        log_model_diagram: Save the model visualization. Defaults to False.
             Requires pydot to be installed, otherwise it will silently skip saving the diagram.
 
     Example:
