@@ -41,7 +41,7 @@ try:
     # neptune-client=0.9.0+ package structure
     from neptune.new import Run
     from neptune.new.exceptions import NeptuneException
-    from neptune.new.integrations.utils import verify_type, expect_not_an_experiment
+    from neptune.new.integrations.utils import expect_not_an_experiment, verify_type
     from neptune.new.types import File
 except ImportError:
     # neptune-client>=1.0.0 package structure
@@ -136,7 +136,7 @@ class NeptuneCallback(Callback):
             except NeptuneException:
                 pass
 
-    def on_train_begin(self, logs=None):  # pylint:disable=unused-argument
+    def on_train_end(self, logs=None):  # pylint:disable=unused-argument
         self._model_logger["summary"] = _model_summary_file(self.model)
         self._model_logger["optimizer_config"] = self.model.optimizer.get_config()  # it is a dict
         self._metric_logger["fit_params"] = self.params
@@ -149,7 +149,7 @@ class NeptuneCallback(Callback):
             self._log_metrics(logs, "train", "batch")
 
     def on_epoch_begin(self, epoch, logs=None):  # pylint:disable=unused-argument
-        self._model_logger['learning_rate'].log(self.model.optimizer.learning_rate)
+        self._model_logger["learning_rate"].log(self.model.optimizer.learning_rate)
 
     def on_epoch_end(self, epoch, logs=None):  # pylint:disable=unused-argument
         self._log_metrics(logs, "train", "epoch")
