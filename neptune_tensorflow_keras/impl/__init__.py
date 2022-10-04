@@ -140,13 +140,13 @@ class NeptuneCallback(Callback):
         self._model_logger["optimizer_config"] = self.model.optimizer.get_config()  # it is a dict
         self._metric_logger["fit_params"] = self.params
 
-        if self._log_model_diagram:
-            self._model_logger["visualization"] = _model_diagram(self.model)
-
     def on_train_end(self, logs=None):  # pylint:disable=unused-argument
         # We need this to be logged at the end of the training, otherwise we are risking this to happen:
         # https://stackoverflow.com/q/55908188/3986320
         self._model_logger["summary"] = _model_summary_file(self.model)
+
+        if self._log_model_diagram:
+            self._model_logger["visualization"] = _model_diagram(self.model)
 
     def on_train_batch_end(self, batch, logs=None):  # pylint:disable=unused-argument
         if self._log_on_batch:
