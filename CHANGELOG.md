@@ -1,3 +1,10 @@
+## neptune-tensorflow-keras 1.1.0
+
+### Fixes
+
+- We fixed a bug that crashed the integration with an error message ``ValueError: This model has not yet been built. Build the model first by calling `build()` or by calling the model on a batch of data.``, when the input layer of a neural network didn't have the `input_shape`
+  parameter defined or the model was not built.
+
 ## neptune-tensorflow-keras 1.0.0
 
 ### Added
