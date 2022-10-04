@@ -32,7 +32,7 @@ def test_e2e(dataset, model, log_model_diagram, log_on_batch):
         validation_data=(x_test, y_test),
     )
 
-    # retry if Neptune didn't reresh its cache
+    # retry if Neptune didn't refresh its cache
     num_tries = 5
     for i in range(num_tries):
         try:
