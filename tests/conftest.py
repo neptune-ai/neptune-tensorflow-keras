@@ -15,8 +15,8 @@ def dataset():
 def model():
     model = tf.keras.models.Sequential(
         [
-            # We are *not* providing input_size to the first layer, so the test catch also the case where the
-            # model was not build yet (e.g. on_train_begin): https://stackoverflow.com/q/55908188/3986320
+            # We are *not* providing input_size to the first layer, so the test will catch also the case where the
+            # model was not build yet: https://stackoverflow.com/q/55908188/3986320
             tf.keras.layers.Flatten(),
             tf.keras.layers.Dense(10),
         ]
