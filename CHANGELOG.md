@@ -1,3 +1,8 @@
+## [UNRELEASED] neptune-tensorflow-keras 1.2.0
+
+### Changes
+- Moved neptune_tensorflow_keras package to src dir ([#33](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/33))
+
 ## neptune-tensorflow-keras 1.1.0
 
 ### Fixes
