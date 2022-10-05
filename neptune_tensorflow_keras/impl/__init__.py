@@ -25,7 +25,7 @@ import tempfile
 try:
     from tensorflow.keras.callbacks import Callback
     from tensorflow.keras.utils import model_to_dot
-except ImportError:
+except ImportError as exc:
     try:
         from keras.callbacks import Callback
         from keras.utils import model_to_dot
@@ -35,7 +35,7 @@ except ImportError:
 
         As Keras is now part of Tensorflow you should install it by running
             pip install tensorflow"""
-        raise ModuleNotFoundError(msg)  # pylint:disable=undefined-variable
+        raise ModuleNotFoundError(msg) from exc  # pylint:disable=undefined-variable
 
 try:
     # neptune-client=0.9.0+ package structure
