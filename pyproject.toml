@@ -16,6 +16,7 @@ exclude = '''
 [tool.isort]
 profile = "black"
 line_length = 120
+force_grid_wrap = 2
 
 [tool.mypy]
 show_error_codes = true

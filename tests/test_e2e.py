@@ -40,7 +40,7 @@ def test_e2e(dataset, model, log_model_diagram, log_on_batch):
             return
         except FetchAttributeNotFoundException:
             time.sleep(i + 1)
-    else:
+    else:  # pylint: disable=W0120
         raise RuntimeError("Test failed to fetch the data from Neptune")
 
 
@@ -64,7 +64,7 @@ def validate_results(run, log_model_diagram, log_on_batch):
     npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/learning_rate"].fetch(), 0.01)
     npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/decay"].fetch(), 0)
     npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/momentum"].fetch(), 0)
-    assert run[f"{base_namespace}/model/optimizer_config/nesterov"].fetch() == False
+    assert run[f"{base_namespace}/model/optimizer_config/nesterov"].fetch() is False
 
     assert run.exists(f"{base_namespace}/fit_params")
     assert run.exists(f"{base_namespace}/fit_params/epochs")
