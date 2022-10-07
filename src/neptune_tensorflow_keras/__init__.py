@@ -14,7 +14,4 @@
 # limitations under the License.
 #
 
-from ._version import get_versions
-
-__version__ = get_versions()["version"]
-del get_versions
+from neptune_tensorflow_keras.impl import *

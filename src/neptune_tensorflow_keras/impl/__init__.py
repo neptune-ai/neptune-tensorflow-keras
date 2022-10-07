@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+__all__ = ["__version__", "NeptuneCallback"]
+
 import io
 import tempfile
 
@@ -53,7 +55,9 @@ except ImportError:
     from neptune.integrations.utils import verify_type, expect_not_an_experiment
     from neptune.types import File
 
-from neptune_tensorflow_keras import __version__
+from neptune_tensorflow_keras._version import get_versions
+
+__version__ = get_versions()["version"]
 
 INTEGRATION_VERSION_KEY = "source_code/integrations/neptune-tensorflow-keras"
 
