@@ -14,4 +14,7 @@
 # limitations under the License.
 #
 
-from neptune_tensorflow_keras.impl import *
+from neptune_tensorflow_keras.impl import (
+    NeptuneCallback,
+    __version__,
+)
