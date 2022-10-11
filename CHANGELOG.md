@@ -3,6 +3,9 @@
 ### Changes
 - Moved neptune_tensorflow_keras package to src dir ([#33](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/33))
 
+### Fixes
+- Fixed NeptuneCallback import error - now possible to directly import with `from neptune_tensorflow_keras import NeptuneCallback` ([#35](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/35))
+
 ## neptune-tensorflow-keras 1.1.0
 
 ### Fixes
