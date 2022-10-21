@@ -544,3 +544,7 @@ ignored-argument-names = "_.*"
 # List of qualified module names which can have objects that can redefine
 # builtins.
 redefining-builtins-modules = ["future.builtins", "past.builtins"]
+
+[tool.flake8]
+max-line-length = 120
+extend-ignore = "E203"
