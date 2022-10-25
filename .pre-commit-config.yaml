@@ -22,3 +22,9 @@ repos:
         args: [--rcfile, pyproject.toml]
         additional_dependencies:
           - pylintfileheader
+  - repo: https://github.com/pycqa/flake8
+    rev: 5.0.4
+    hooks:
+      - id: flake8
+        entry: pflake8
+        additional_dependencies: [pyproject-flake8]
