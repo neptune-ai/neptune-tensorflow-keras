@@ -40,7 +40,7 @@ def test_e2e(dataset, model, log_model_diagram, log_on_batch):
             return
         except FetchAttributeNotFoundException:
             time.sleep(i + 1)
-    else:  # pylint: disable=W0120
+    else:
         raise RuntimeError("Test failed to fetch the data from Neptune")
 
 

@@ -15,13 +15,6 @@ repos:
     hooks:
       - id: black
         args: [--config, pyproject.toml]
-  - repo: https://github.com/pycqa/pylint
-    rev: v2.14.5
-    hooks:
-      - id: pylint
-        args: [--rcfile, pyproject.toml]
-        additional_dependencies:
-          - pylintfileheader
   - repo: https://github.com/pycqa/flake8
     rev: 5.0.4
     hooks:
