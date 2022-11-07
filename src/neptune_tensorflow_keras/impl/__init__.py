@@ -55,9 +55,7 @@ except ImportError:
     from neptune.integrations.utils import verify_type, expect_not_an_experiment
     from neptune.types import File
 
-from neptune_tensorflow_keras._version import get_versions
-
-__version__ = get_versions()["version"]
+from neptune_tensorflow_keras.impl.version import __version__
 
 INTEGRATION_VERSION_KEY = "source_code/integrations/neptune-tensorflow-keras"
 
