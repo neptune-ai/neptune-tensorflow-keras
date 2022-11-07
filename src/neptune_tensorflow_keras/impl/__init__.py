@@ -184,6 +184,6 @@ def _model_diagram(model) -> File:
     if dot is not None:
         # the same as TF/Keras does, we will fail with ImportError unless using a notebook,
         # where it just prints a warning message
-        tmp = tempfile.NamedTemporaryFile(delete=False)
+        tmp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
         dot.write(tmp.name, format="png")
-        return File(tmp.name, extension="png")
+        return File(tmp.name)
