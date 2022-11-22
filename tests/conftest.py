@@ -1,3 +1,5 @@
+import random
+
 import pytest
 import tensorflow as tf
 
@@ -8,11 +10,14 @@ def dataset():
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
     x_train, x_test = x_train / 255.0, x_test / 255.0
 
-    x_train = x_train[:3000, :, :]
-    y_train = y_train[:3000]
+    train_point = random.randint(1, len(x_train))
+    test_point = random.randint(1, len(x_test))
 
-    x_test = x_test[:500, :, :]
-    y_test = y_test[:500]
+    x_train = x_train[train_point - 1 : train_point + 1, :, :]
+    y_train = y_train[train_point - 1 : train_point + 1]
+
+    x_test = x_test[test_point - 1 : test_point + 1, :, :]
+    y_test = y_test[test_point - 1 : test_point + 1]
 
     return (x_train, y_train), (x_test, y_test)
 
