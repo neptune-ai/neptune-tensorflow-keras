@@ -22,6 +22,11 @@ def model():
             tf.keras.layers.Dense(10),
         ]
     )
+    lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+        initial_learning_rate=1e-2, decay_steps=10000, decay_rate=0.9
+    )
+    optimizer = tf.keras.optimizers.SGD(learning_rate=lr_schedule)
+
     loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
-    model.compile(optimizer="sgd", loss=loss_fn, metrics=["accuracy"])
+    model.compile(optimizer=optimizer, loss=loss_fn, metrics=["accuracy"])
     return model
