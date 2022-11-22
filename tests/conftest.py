@@ -1,23 +1,13 @@
-import numpy as np
 import pytest
 import tensorflow as tf
 
 
-def _vectorize_sequences(sequences, dims=1000):
-    results = np.zeros((len(sequences), dims))
-    for idx, seq in enumerate(sequences):
-        results[idx, seq] = 1.0
-
-    return results
-
-
 @pytest.fixture(scope="session")
 def dataset():
-    imdb = tf.keras.datasets.imdb
-    (x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=1000)
-
-    x_train = _vectorize_sequences(x_train)
-    x_test = _vectorize_sequences(x_test)
+    x_train = tf.random.uniform(shape=[2, 28, 28])
+    y_train = tf.constant([1, 1], shape=(2, 1), dtype=tf.int8)
+    x_test = tf.random.uniform(shape=[2, 28, 28])
+    y_test = tf.constant([1, 1], shape=(2, 1), dtype=tf.int8)
 
     return (x_train, y_train), (x_test, y_test)
 

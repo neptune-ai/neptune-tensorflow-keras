@@ -28,6 +28,7 @@ def test_e2e(dataset, model, log_model_diagram, log_on_batch):
         x_train,
         y_train,
         epochs=5,
+        batch_size=1,
         callbacks=[callback],
         validation_data=(x_test, y_test),
     )
