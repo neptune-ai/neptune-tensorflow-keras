@@ -28,6 +28,7 @@ def test_e2e(dataset, model, log_model_diagram, log_on_batch):
         x_train,
         y_train,
         epochs=5,
+        batch_size=1,
         callbacks=[callback],
         validation_data=(x_test, y_test),
     )
@@ -61,8 +62,10 @@ def validate_results(run, log_model_diagram, log_on_batch):
 
     assert run.exists(f"{base_namespace}/model/optimizer_config")
     assert run[f"{base_namespace}/model/optimizer_config/name"].fetch() == "SGD"
-    npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/learning_rate"].fetch(), 0.01)
-    npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/decay"].fetch(), 0)
+    learning_rate_dict = run[f"{base_namespace}/model/optimizer_config/learning_rate"].fetch()
+    assert learning_rate_dict["config"]["decay_rate"] == 0.9
+    assert learning_rate_dict["config"]["initial_learning_rate"] == 0.01
+
     npt.assert_approx_equal(run[f"{base_namespace}/model/optimizer_config/momentum"].fetch(), 0)
     assert run[f"{base_namespace}/model/optimizer_config/nesterov"].fetch() is False
 
