@@ -1,23 +1,23 @@
-import random
-
+import numpy as np
 import pytest
 import tensorflow as tf
 
 
+def _vectorize_sequences(sequences, dims=1000):
+    results = np.zeros((len(sequences), dims))
+    for idx, seq in enumerate(sequences):
+        results[idx, seq] = 1.0
+
+    return results
+
+
 @pytest.fixture(scope="session")
 def dataset():
-    mnist = tf.keras.datasets.mnist
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
-    x_train, x_test = x_train / 255.0, x_test / 255.0
+    imdb = tf.keras.datasets.imdb
+    (x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=1000)
 
-    train_point = random.randint(1, len(x_train))
-    test_point = random.randint(1, len(x_test))
-
-    x_train = x_train[train_point - 1 : train_point + 1, :, :]
-    y_train = y_train[train_point - 1 : train_point + 1]
-
-    x_test = x_test[test_point - 1 : test_point + 1, :, :]
-    y_test = y_test[test_point - 1 : test_point + 1]
+    x_train = _vectorize_sequences(x_train)
+    x_test = _vectorize_sequences(x_test)
 
     return (x_train, y_train), (x_test, y_test)
 
