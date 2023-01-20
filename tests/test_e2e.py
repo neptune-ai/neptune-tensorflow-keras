@@ -33,16 +33,8 @@ def test_e2e(dataset, model, log_model_diagram, log_on_batch):
         validation_data=(x_test, y_test),
     )
 
-    # retry if Neptune didn't refresh its cache
-    num_tries = 5
-    for i in range(num_tries):
-        try:
-            validate_results(run, log_model_diagram, log_on_batch)
-            return
-        except FetchAttributeNotFoundException:
-            time.sleep(i + 1)
-    else:
-        raise RuntimeError("Test failed to fetch the data from Neptune")
+    run.wait()
+    validate_results(run, log_model_diagram, log_on_batch)
 
 
 def validate_results(run, log_model_diagram, log_on_batch):
