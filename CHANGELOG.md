@@ -1,3 +1,8 @@
+## neptune-tensorflow-keras 1.2.1
+
+### Fixes
+- Remove misleading information from the docstring. Pydot is needed when saving the model diagram.
+
 ## neptune-tensorflow-keras 1.2.0
 
 ### Changes

@@ -71,7 +71,7 @@ class NeptuneCallback(Callback):
             logged by the NeptuneCallback will be stored. Defaults to "training".
         log_on_batch (`bool`): Log the metrics also for each batch, not only each epoch.
         log_model_diagram (`bool`): Save the model visualization. Defaults to False.
-            Requires pydot to be installed, otherwise it will silently skip saving the diagram.
+            This functionality requires pydot to be installed (https://pypi.org/project/pydot/).
 
     Example:
 
