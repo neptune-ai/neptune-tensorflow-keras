@@ -16,7 +16,7 @@
 
 __all__ = ["__version__", "NeptuneCallback"]
 
-from types import Union
+from typing import Union
 import io
 import tempfile
 
