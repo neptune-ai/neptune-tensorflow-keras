@@ -16,6 +16,7 @@
 
 __all__ = ["__version__", "NeptuneCallback"]
 
+from ctypes import Union
 import io
 import tempfile
 
@@ -39,21 +40,13 @@ except ImportError as exc:
             pip install tensorflow"""
         raise ModuleNotFoundError(msg) from exc
 
-try:
-    # neptune-client=0.9.0+ package structure
-    from neptune.new import Run
-    from neptune.new.exceptions import NeptuneException
-    from neptune.new.integrations.utils import (
-        expect_not_an_experiment,
-        verify_type,
-    )
-    from neptune.new.types import File
-except ImportError:
-    # neptune-client>=1.0.0 package structure
-    from neptune import Run
-    from neptune.exceptions import NeptuneException
-    from neptune.integrations.utils import verify_type, expect_not_an_experiment
-    from neptune.types import File
+import neptune.new as neptune
+from neptune.new.exceptions import NeptuneException
+from neptune.new.integrations.utils import (
+    expect_not_an_experiment,
+    verify_type,
+)
+from neptune.new.types import File
 
 from neptune_tensorflow_keras.impl.version import __version__
 
@@ -95,7 +88,7 @@ class NeptuneCallback(Callback):
 
     def __init__(
         self,
-        run: Run,
+        run: Union[neptune.Run, neptune.handler.Handler],
         base_namespace: str = "training",
         log_model_diagram: bool = False,
         log_on_batch: bool = False,
@@ -103,7 +96,7 @@ class NeptuneCallback(Callback):
         super().__init__()
 
         expect_not_an_experiment(run)
-        verify_type("run", run, Run)
+        verify_type("run", run, (neptune.Run, neptune.handler.Handler))
         verify_type("base_namespace", base_namespace, (str, type(None)))
         verify_type("log_model_diagram", log_model_diagram, bool)
 
@@ -137,7 +130,7 @@ class NeptuneCallback(Callback):
             try:
                 if metric in ("batch", "size") or metric.startswith("val_"):
                     continue
-                logger[metric].log(value)
+                logger[metric].append(value)
             except NeptuneException:
                 pass
 
@@ -158,7 +151,7 @@ class NeptuneCallback(Callback):
             self._log_metrics(logs, "train", "batch")
 
     def on_epoch_begin(self, epoch, logs=None):
-        self._model_logger["learning_rate"].log(self.model.optimizer.learning_rate)
+        self._model_logger["learning_rate"].append(self.model.optimizer.learning_rate)
 
     def on_epoch_end(self, epoch, logs=None):
         self._log_metrics(logs, "train", "epoch")

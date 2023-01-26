@@ -34,12 +34,33 @@ def test_e2e(dataset, model, log_model_diagram, log_on_batch):
     )
 
     run.wait()
-    validate_results(run, log_model_diagram, log_on_batch)
+    validate_results(run, log_model_diagram, log_on_batch, base_namespace="training")
 
+def test_e2e_using_namespace(dataset, model):
+    log_model_diagram = True
+    log_on_batch = False
 
-def validate_results(run, log_model_diagram, log_on_batch):
-    base_namespace = "training"
+    run = init_run()
+    namespace = "my_namespace"
+    handler = run[namespace]
 
+    callback = NeptuneCallback(run=handler, log_model_diagram=log_model_diagram, log_on_batch=log_on_batch)
+
+    (x_train, y_train), (x_test, y_test) = dataset
+
+    model.fit(
+        x_train,
+        y_train,
+        epochs=5,
+        batch_size=1,
+        callbacks=[callback],
+        validation_data=(x_test, y_test),
+    )
+
+    run.wait()
+    validate_results(run, log_model_diagram, log_on_batch, base_namespace=f"{namespace}/training")
+
+def validate_results(run, log_model_diagram, log_on_batch, base_namespace):
     for subset in ["train", "validation"]:
         for granularity in ["batch", "epoch"]:
             if granularity == "batch" and not log_on_batch:
