@@ -120,7 +120,7 @@ class NeptuneCallback(Callback):
         else:
             self._base_namespace = base_namespace
 
-        self._run[INTEGRATION_VERSION_KEY] = __version__
+        self._run.get_root_object()[INTEGRATION_VERSION_KEY] = __version__
 
     @property
     def _metric_logger(self):
