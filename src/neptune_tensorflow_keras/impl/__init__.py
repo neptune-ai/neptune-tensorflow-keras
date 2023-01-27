@@ -47,6 +47,7 @@ from neptune.new.integrations.utils import (
     verify_type,
 )
 from neptune.new.types import File
+from neptune.new.utils import stringify_unsupported
 
 from neptune_tensorflow_keras.impl.version import __version__
 
@@ -59,11 +60,11 @@ class NeptuneCallback(Callback):
     See the example run here https://ui.neptune.ai/shared/keras-integration/e/KERAS-23/logs
 
     Args:
-        run (`neptune.new.Run`): Neptune run.
-        base_namespace (`str`, optional): Namespace (folder) under which all metadata
+        run: Neptune run or run handler.
+        base_namespace: Namespace (folder) under which all metadata
             logged by the NeptuneCallback will be stored. Defaults to "training".
-        log_on_batch (`bool`): Log the metrics also for each batch, not only each epoch.
-        log_model_diagram (`bool`): Save the model visualization. Defaults to False.
+        log_on_batch: Log the metrics also for each batch, not only each epoch.
+        log_model_diagram: Save the model visualization. Defaults to False.
             This functionality requires pydot to be installed (https://pypi.org/project/pydot/).
 
     Example:
@@ -135,7 +136,8 @@ class NeptuneCallback(Callback):
                 pass
 
     def on_train_begin(self, logs=None):
-        self._model_logger["optimizer_config"] = self.model.optimizer.get_config()  # it is a dict
+        optimizer_config = self.model.optimizer.get_config()  # it is a dict
+        self._model_logger["optimizer_config"] = stringify_unsupported(optimizer_config)
         self._metric_logger["fit_params"] = self.params
 
     def on_train_end(self, logs=None):

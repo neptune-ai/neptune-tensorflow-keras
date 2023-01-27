@@ -14,7 +14,7 @@ python = "^3.6"
 # Python lack of functionalities from future versions
 importlib-metadata = { version = "*", python = "<3.8" }
 
-neptune-client = ">=0.16.14"
+neptune-client = ">=0.16.16"
 tensorflow = ">2.0.0"
 
 # dev

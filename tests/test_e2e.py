@@ -5,14 +5,7 @@ import pytest
 
 from neptune_tensorflow_keras.impl import NeptuneCallback
 
-try:
-    # neptune-client=0.9.0+ package structure
-    from neptune.new import init_run
-    from neptune.new.exceptions import FetchAttributeNotFoundException
-except ImportError:
-    # neptune-client>=1.0.0 package structure
-    from neptune import init_run
-    from neptune.exceptions import FetchAttributeNotFoundException
+from neptune.new import init_run
 
 
 @pytest.mark.parametrize("log_model_diagram", [True, False])
