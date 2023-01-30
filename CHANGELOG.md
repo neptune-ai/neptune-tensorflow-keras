@@ -6,9 +6,8 @@
   location of the run.
 
 ### Breaking changes
-- We removed support for the legacy Neptune client API. Use it with `import neptune.new as neptune`.
 - Instead of the `log()` method, the integration now uses `append()` which is available since version 0.16.14
-  of neptune-client.
+  of the neptune-client.
 
 ## neptune-tensorflow-keras 1.2.1
 
