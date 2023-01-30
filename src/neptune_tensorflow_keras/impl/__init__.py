@@ -16,9 +16,9 @@
 
 __all__ = ["__version__", "NeptuneCallback"]
 
-from typing import Union
 import io
 import tempfile
+from typing import Union
 
 # Note: we purposefully try to import `tensorflow.keras.callbacks.Callback`
 # before `keras.callbacks.Callback` because the former is compatible with both
@@ -120,7 +120,11 @@ class NeptuneCallback(Callback):
         else:
             self._base_namespace = base_namespace
 
-        self._run.get_root_object()[INTEGRATION_VERSION_KEY] = __version__
+        root_obj = self._run
+        if isinstance(self._run, neptune.handler.Handler):
+            root_obj = self._run.get_root_object()
+
+        root_obj[INTEGRATION_VERSION_KEY] = __version__
 
     @property
     def _metric_logger(self):

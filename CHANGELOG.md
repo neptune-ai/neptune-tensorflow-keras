@@ -2,13 +2,12 @@
 
 ### Changes
 - `NeptuneCallback` now accepts namespace `Handler` as an alternative to `Run` for the `run` argument. This means that
-  you can call it like `NeptuneCallback(run=run["some/namespace/"])` to log everything to the `some/namespace/` 
+  you can call it like `NeptuneCallback(run=run["some/namespace/"])` to log everything to the `some/namespace/`
   location of the run.
 
 ### Breaking changes
-- We removed support for the legacy Neptune client API. Use it with `import neptune.new as neptune`.
 - Instead of the `log()` method, the integration now uses `append()` which is available since version 0.16.14
-  of neptune-client.
+  of the neptune-client.
 
 ## neptune-tensorflow-keras 1.2.1
 

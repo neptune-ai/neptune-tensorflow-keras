@@ -32,6 +32,7 @@ def test_e2e(dataset, model, log_model_diagram, log_on_batch):
     run.wait()
     validate_results(run, log_model_diagram, log_on_batch, base_namespace="training")
 
+
 def test_e2e_using_namespace(dataset, model):
     log_model_diagram = True
     log_on_batch = False
@@ -55,6 +56,7 @@ def test_e2e_using_namespace(dataset, model):
 
     run.wait()
     validate_results(run, log_model_diagram, log_on_batch, base_namespace=f"{namespace}/training")
+
 
 def validate_results(run, log_model_diagram, log_on_batch, base_namespace):
     for subset in ["train", "validation"]:
