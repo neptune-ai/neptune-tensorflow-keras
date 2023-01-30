@@ -69,7 +69,7 @@ class NeptuneCallback(Callback):
     See the example run here https://ui.neptune.ai/shared/keras-integration/e/KERAS-23/logs
 
     Args:
-        run: Neptune run or run handler.
+        run: Neptune run or namespace handler.
         base_namespace: Namespace (folder) under which all metadata
             logged by the NeptuneCallback will be stored. Defaults to "training".
         log_on_batch: Log the metrics also for each batch, not only each epoch.
