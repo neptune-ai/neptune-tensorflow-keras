@@ -18,6 +18,7 @@ __all__ = ["__version__", "NeptuneCallback"]
 
 import io
 import tempfile
+from typing import Union
 
 # Note: we purposefully try to import `tensorflow.keras.callbacks.Callback`
 # before `keras.callbacks.Callback` because the former is compatible with both
@@ -41,19 +42,21 @@ except ImportError as exc:
 
 try:
     # neptune-client=0.9.0+ package structure
-    from neptune.new import Run
+    import neptune.new as neptune
     from neptune.new.exceptions import NeptuneException
     from neptune.new.integrations.utils import (
         expect_not_an_experiment,
         verify_type,
     )
     from neptune.new.types import File
+    from neptune.new.utils import stringify_unsupported
 except ImportError:
     # neptune-client>=1.0.0 package structure
-    from neptune import Run
+    import neptune
     from neptune.exceptions import NeptuneException
     from neptune.integrations.utils import verify_type, expect_not_an_experiment
     from neptune.types import File
+    from neptune.utils import stringify_unsupported
 
 from neptune_tensorflow_keras.impl.version import __version__
 
@@ -66,11 +69,11 @@ class NeptuneCallback(Callback):
     See the example run here https://ui.neptune.ai/shared/keras-integration/e/KERAS-23/logs
 
     Args:
-        run (`neptune.new.Run`): Neptune run.
-        base_namespace (`str`, optional): Namespace (folder) under which all metadata
+        run: Neptune run or namespace handler.
+        base_namespace: Namespace (folder) under which all metadata
             logged by the NeptuneCallback will be stored. Defaults to "training".
-        log_on_batch (`bool`): Log the metrics also for each batch, not only each epoch.
-        log_model_diagram (`bool`): Save the model visualization. Defaults to False.
+        log_on_batch: Log the metrics also for each batch, not only each epoch.
+        log_model_diagram: Save the model visualization. Defaults to False.
             This functionality requires pydot to be installed (https://pypi.org/project/pydot/).
 
     Example:
@@ -95,7 +98,7 @@ class NeptuneCallback(Callback):
 
     def __init__(
         self,
-        run: Run,
+        run: Union[neptune.Run, neptune.handler.Handler],
         base_namespace: str = "training",
         log_model_diagram: bool = False,
         log_on_batch: bool = False,
@@ -103,7 +106,7 @@ class NeptuneCallback(Callback):
         super().__init__()
 
         expect_not_an_experiment(run)
-        verify_type("run", run, Run)
+        verify_type("run", run, (neptune.Run, neptune.handler.Handler))
         verify_type("base_namespace", base_namespace, (str, type(None)))
         verify_type("log_model_diagram", log_model_diagram, bool)
 
@@ -117,7 +120,11 @@ class NeptuneCallback(Callback):
         else:
             self._base_namespace = base_namespace
 
-        self._run[INTEGRATION_VERSION_KEY] = __version__
+        root_obj = self._run
+        if isinstance(self._run, neptune.handler.Handler):
+            root_obj = self._run.get_root_object()
+
+        root_obj[INTEGRATION_VERSION_KEY] = __version__
 
     @property
     def _metric_logger(self):
@@ -137,12 +144,13 @@ class NeptuneCallback(Callback):
             try:
                 if metric in ("batch", "size") or metric.startswith("val_"):
                     continue
-                logger[metric].log(value)
+                logger[metric].append(value)
             except NeptuneException:
                 pass
 
     def on_train_begin(self, logs=None):
-        self._model_logger["optimizer_config"] = self.model.optimizer.get_config()  # it is a dict
+        optimizer_config = self.model.optimizer.get_config()  # it is a dict
+        self._model_logger["optimizer_config"] = stringify_unsupported(optimizer_config)
         self._metric_logger["fit_params"] = self.params
 
     def on_train_end(self, logs=None):
@@ -158,7 +166,7 @@ class NeptuneCallback(Callback):
             self._log_metrics(logs, "train", "batch")
 
     def on_epoch_begin(self, epoch, logs=None):
-        self._model_logger["learning_rate"].log(self.model.optimizer.learning_rate)
+        self._model_logger["learning_rate"].append(self.model.optimizer.learning_rate)
 
     def on_epoch_end(self, epoch, logs=None):
         self._log_metrics(logs, "train", "epoch")

@@ -1,5 +1,3 @@
-import time
-
 import numpy.testing as npt
 import pytest
 
@@ -8,11 +6,9 @@ from neptune_tensorflow_keras.impl import NeptuneCallback
 try:
     # neptune-client=0.9.0+ package structure
     from neptune.new import init_run
-    from neptune.new.exceptions import FetchAttributeNotFoundException
 except ImportError:
     # neptune-client>=1.0.0 package structure
     from neptune import init_run
-    from neptune.exceptions import FetchAttributeNotFoundException
 
 
 @pytest.mark.parametrize("log_model_diagram", [True, False])
@@ -34,12 +30,35 @@ def test_e2e(dataset, model, log_model_diagram, log_on_batch):
     )
 
     run.wait()
-    validate_results(run, log_model_diagram, log_on_batch)
+    validate_results(run, log_model_diagram, log_on_batch, base_namespace="training")
 
 
-def validate_results(run, log_model_diagram, log_on_batch):
-    base_namespace = "training"
+def test_e2e_using_namespace(dataset, model):
+    log_model_diagram = True
+    log_on_batch = False
 
+    run = init_run()
+    namespace = "my_namespace"
+    handler = run[namespace]
+
+    callback = NeptuneCallback(run=handler, log_model_diagram=log_model_diagram, log_on_batch=log_on_batch)
+
+    (x_train, y_train), (x_test, y_test) = dataset
+
+    model.fit(
+        x_train,
+        y_train,
+        epochs=5,
+        batch_size=1,
+        callbacks=[callback],
+        validation_data=(x_test, y_test),
+    )
+
+    run.wait()
+    validate_results(run, log_model_diagram, log_on_batch, base_namespace=f"{namespace}/training")
+
+
+def validate_results(run, log_model_diagram, log_on_batch, base_namespace):
     for subset in ["train", "validation"]:
         for granularity in ["batch", "epoch"]:
             if granularity == "batch" and not log_on_batch:
