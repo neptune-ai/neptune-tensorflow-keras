@@ -107,7 +107,7 @@ class NeptuneCallback(Callback):
 
         expect_not_an_experiment(run)
         verify_type("run", run, (neptune.Run, neptune.handler.Handler))
-        verify_type("base_namespace", base_namespace, (str, type(None)))
+        verify_type("base_namespace", base_namespace, str)
         verify_type("log_model_diagram", log_model_diagram, bool)
 
         self._run = run
