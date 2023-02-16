@@ -50,6 +50,8 @@ try:
     )
     from neptune.new.types import File
     from neptune.new.utils import stringify_unsupported
+    from neptune.new.handler import Handler
+    from neptune.new import Run
 except ImportError:
     # neptune-client>=1.0.0 package structure
     import neptune
@@ -57,6 +59,8 @@ except ImportError:
     from neptune.integrations.utils import verify_type, expect_not_an_experiment
     from neptune.types import File
     from neptune.utils import stringify_unsupported
+    from neptune.handler import Handler
+    from neptune import Run
 
 from neptune_tensorflow_keras.impl.version import __version__
 
@@ -98,7 +102,7 @@ class NeptuneCallback(Callback):
 
     def __init__(
         self,
-        run: Union[neptune.Run, neptune.handler.Handler],
+        run: Union[Run, Handler],
         base_namespace: str = "training",
         log_model_diagram: bool = False,
         log_on_batch: bool = False,
@@ -106,7 +110,7 @@ class NeptuneCallback(Callback):
         super().__init__()
 
         expect_not_an_experiment(run)
-        verify_type("run", run, (neptune.Run, neptune.handler.Handler))
+        verify_type("run", run, (Run, Handler))
         verify_type("base_namespace", base_namespace, str)
         verify_type("log_model_diagram", log_model_diagram, bool)
 
@@ -121,7 +125,7 @@ class NeptuneCallback(Callback):
             self._base_namespace = base_namespace
 
         root_obj = self._run
-        if isinstance(self._run, neptune.handler.Handler):
+        if isinstance(self._run, Handler):
             root_obj = self._run.get_root_object()
 
         root_obj[INTEGRATION_VERSION_KEY] = __version__
