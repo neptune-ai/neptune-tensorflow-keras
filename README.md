@@ -31,19 +31,21 @@ Experiment tracking, model registry, data versioning, and live model monitoring 
 
 ## Example
 
+On the command line:
+
 ```
-# On the command line:
 pip install neptune-tensorflow-keras
 ```
 
+In Python:
+
 ```python
-# In Python:
 import neptune
 from neptune.integrations.tensorflow_keras import NeptuneCallback
 from neptune import ANONYMOUS_API_TOKEN
 
 # Start a run
-run = neptune.init(
+run = neptune.init_run(
     project="common/tf-keras-integration",
     api_token=ANONYMOUS_API_TOKEN,
 )
