@@ -66,34 +66,28 @@ INTEGRATION_VERSION_KEY = "source_code/integrations/neptune-tensorflow-keras"
 class NeptuneCallback(Callback):
     """Captures model training metadata and logs them to Neptune.
 
-    See the example run here https://ui.neptune.ai/shared/keras-integration/e/KERAS-23/logs
+    Note: To use this module, you need to have Keras or Tensorflow 2 installed.
 
     Args:
-        run: Neptune run or namespace handler.
-        base_namespace: Namespace (folder) under which all metadata
-            logged by the NeptuneCallback will be stored. Defaults to "training".
-        log_on_batch: Log the metrics also for each batch, not only each epoch.
-        log_model_diagram: Save the model visualization. Defaults to False.
-            This functionality requires pydot to be installed (https://pypi.org/project/pydot/).
+        run: Neptune run object. You can also pass a namespace handler object;
+            for example, run["test"], in which case all metadata is logged under
+            the "test" namespace inside the run.
+        base_namespace: Namespace where all metadata logged by the callback is stored.
+        log_on_batch: Whether to log the metrics also for each batch, not only each epoch.
+        log_model_diagram: Whether to save the model visualization.
+            Requires pydot to be installed: https://pypi.org/project/pydot/
 
     Example:
+        import neptune
+        from neptune.integrations.tensorflow_keras import NeptuneCallback
 
-        Initialize Neptune client:
+        run = neptune.init_run()
+        neptune_callback = NeptuneCallback(run=run)
+        model.fit(x_train, y_train, callbacks=[neptune_callback])
 
-        >>> import neptune.new as neptune
-        >>> run = neptune.init_run(
-        ...     project="common/tf-keras-integration",
-        ...     api_token=neptune.ANONYMOUS_API_TOKEN,
-        ... )
-
-        Instantiate the callback and pass it to the `callbacks` argument of `model.fit()`:
-
-        >>> from neptune.new.integrations.tensorflow_keras import NeptuneCallback
-        >>> neptune_callback = NeptuneCallback(run=run)
-        >>> model.fit(x_train, y_train, callbacks=[neptune_callback])
-
-    Note:
-        To use this module, you need to have Keras or Tensorflow 2 installed.
+    For more, see the docs:
+        Tutorial: https://docs.neptune.ai/integrations/keras/
+        API reference: https://docs.neptune.ai/api/integrations/keras/
     """
 
     def __init__(
