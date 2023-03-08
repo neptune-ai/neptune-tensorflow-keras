@@ -14,7 +14,6 @@ python = "^3.7"
 # Python lack of functionalities from future versions
 importlib-metadata = { version = "*", python = "<3.8" }
 
-neptune = ">=1.0.0"
 tensorflow = ">2.0.0"
 
 # dev
