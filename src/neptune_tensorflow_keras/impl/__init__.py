@@ -40,6 +40,8 @@ except ImportError as exc:
             pip install tensorflow"""
         raise ModuleNotFoundError(msg) from exc
 
+from neptune_tensorflow_keras.impl.version import __version__
+
 try:
     # neptune-client>=1.0.0 package structure
     import neptune
@@ -51,26 +53,16 @@ try:
     from neptune.types import File
     from neptune.utils import stringify_unsupported
 except ImportError:
-    try:
-        # neptune-client=0.9.0+ package structure
-        import neptune.new as neptune
-        from neptune.new.exceptions import NeptuneException
-        from neptune.new.integrations.utils import (
-            expect_not_an_experiment,
-            verify_type,
-        )
-        from neptune.new.types import File
-        from neptune.new.utils import stringify_unsupported
-    except ImportError as exc:
-        msg = """
-                neptune package not found.
+    # neptune-client=0.9.0+ package structure
+    import neptune.new as neptune
+    from neptune.new.exceptions import NeptuneException
+    from neptune.new.integrations.utils import (
+        expect_not_an_experiment,
+        verify_type,
+    )
+    from neptune.new.types import File
+    from neptune.new.utils import stringify_unsupported
 
-                Install neptune package by running
-                    `pip install neptune`
-            """
-        raise ModuleNotFoundError(msg) from exc
-
-from neptune_tensorflow_keras.impl.version import __version__
 
 INTEGRATION_VERSION_KEY = "source_code/integrations/neptune-tensorflow-keras"
 
