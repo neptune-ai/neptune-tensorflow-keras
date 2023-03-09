@@ -16,11 +16,12 @@ else:
 
 if not (find_spec("neptune") or find_spec("neptune-client")):
     msg = """
-            neptune package not found.
+            The Neptune client library was not found.
 
-            Install neptune package by running
+            Install the neptune package with
                 `pip install neptune`
-                    """
+            
+            Need help? -> https://docs.neptune.ai/setup/installation/"""
     raise PackageNotFoundError(msg)
 
 try:
