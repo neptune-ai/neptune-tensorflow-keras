@@ -1,3 +1,9 @@
+## neptune-tensorflow-keras 2.1.0
+
+### Changes
+- Removed `neptune` and `neptune-client` from base requirements.
+- Added checking `neptune` or `neptune-client` installation during runtime.
+
 ## neptune-tensorflow-keras 2.0.0
 
 ### Changes
