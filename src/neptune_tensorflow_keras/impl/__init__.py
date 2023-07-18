@@ -164,7 +164,7 @@ class NeptuneCallback(Callback):
             self._log_metrics(logs, "train", "batch")
 
     def on_epoch_begin(self, epoch, logs=None):
-        self._model_logger["learning_rate"].append(self.model.optimizer.learning_rate)
+        self._model_logger["learning_rate"].append(self.model.optimizer.learning_rate.numpy())
 
     def on_epoch_end(self, epoch, logs=None):
         self._log_metrics(logs, "train", "epoch")
