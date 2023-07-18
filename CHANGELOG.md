@@ -1,3 +1,8 @@
+## neptune-tensorflow-keras 2.2.0
+
+### Fixes
+- Support logging learning_rate in Multi-GPU training set-up ([#57](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/57))
+
 ## neptune-tensorflow-keras 2.1.0
 
 ### Changes
