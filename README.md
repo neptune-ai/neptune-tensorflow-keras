@@ -1,13 +1,13 @@
 # Neptune + Keras integration
 
-Experiment tracking, model registry, data versioning, and live model monitoring for Keras trained models.
+Experiment tracking for Keras-trained models.
 
 ## What will you get with this integration?
 
-* Log, display, organize, and compare ML experiments in a single place
-* Version, store, manage, and query trained models, and model building metadata
-* Record and monitor model training, evaluation, or production runs live
-* Collaborate with a team
+* Log, organize, visualize, and compare ML experiments in a single place
+* Monitor model training live
+* Version and query production-ready models and associated metadata (e.g., datasets)
+* Collaborate with the team and across the organization
 
 ## What will be logged to Neptune?
 
@@ -19,7 +19,7 @@ Experiment tracking, model registry, data versioning, and live model monitoring 
 * model weights,
 * [other metadata](https://docs.neptune.ai/logging/what_you_can_log)
 
-![image](https://user-images.githubusercontent.com/97611089/160638338-8a276866-6ce8-4d0a-93f5-bd564d00afdf.png)
+![image](https://docs.neptune.ai/img/app/integrations/keras.png)
 *Example charts in the Neptune UI with logged accuracy and loss*
 
 ## Resources
