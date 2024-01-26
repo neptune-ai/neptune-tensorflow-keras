@@ -1,3 +1,8 @@
+## [UNRELEASED] neptune-tensorflow-keras 2.2.1
+
+### Changes
+- Added `log_model_summary` parameter to specify if the model summary should be logged ([#59](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/59))
+
 ## neptune-tensorflow-keras 2.2.0
 
 ### Fixes
