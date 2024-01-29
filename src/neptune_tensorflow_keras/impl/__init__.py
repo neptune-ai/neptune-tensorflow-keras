@@ -18,6 +18,7 @@ __all__ = ["__version__", "NeptuneCallback"]
 
 import io
 import tempfile
+import warnings
 from typing import Union
 
 # Note: we purposefully try to import `tensorflow.keras.callbacks.Callback`
@@ -80,6 +81,7 @@ class NeptuneCallback(Callback):
         log_on_batch: Whether to log the metrics also for each batch, not only each epoch.
         log_model_diagram: Whether to save the model visualization.
             Requires pydot to be installed: https://pypi.org/project/pydot/
+        log_model_summary: Whether to log the model summary.
 
     Example:
         import neptune
@@ -100,6 +102,7 @@ class NeptuneCallback(Callback):
         base_namespace: str = "training",
         log_model_diagram: bool = False,
         log_on_batch: bool = False,
+        log_model_summary: bool = True,
     ):
         super().__init__()
 
@@ -107,11 +110,12 @@ class NeptuneCallback(Callback):
         verify_type("run", run, (neptune.Run, neptune.handler.Handler))
         verify_type("base_namespace", base_namespace, str)
         verify_type("log_model_diagram", log_model_diagram, bool)
+        verify_type("log_model_summary", log_model_summary, bool)
 
         self._run = run
         self._log_model_diagram = log_model_diagram
-
         self._log_on_batch = log_on_batch
+        self._log_model_summary = log_model_summary
 
         if base_namespace.endswith("/"):
             self._base_namespace = base_namespace[:-1]
@@ -154,10 +158,17 @@ class NeptuneCallback(Callback):
     def on_train_end(self, logs=None):
         # We need this to be logged at the end of the training, otherwise we are risking this to happen:
         # https://stackoverflow.com/q/55908188/3986320
-        self._model_logger["summary"] = _model_summary_file(self.model)
+        if self._log_model_summary:
+            try:
+                self._model_logger["summary"] = _model_summary_file(self.model)
+            except ValueError as e:
+                warnings.warn(f"Model summary not logged. {e}", category=RuntimeWarning)
 
         if self._log_model_diagram:
-            self._model_logger["visualization"] = _model_diagram(self.model)
+            try:
+                self._model_logger["visualization"] = _model_diagram(self.model)
+            except ValueError as e:
+                warnings.warn(f"Model visualization not logged. {e}", category=RuntimeWarning)
 
     def on_train_batch_end(self, batch, logs=None):
         if self._log_on_batch:

@@ -13,10 +13,13 @@ except ImportError:
 
 @pytest.mark.parametrize("log_model_diagram", [True, False])
 @pytest.mark.parametrize("log_on_batch", [True, False])
-def test_e2e(dataset, model, log_model_diagram, log_on_batch):
+@pytest.mark.parametrize("log_model_summary", [True, False])
+def test_e2e(dataset, model, log_model_diagram, log_on_batch, log_model_summary):
     run = init_run()
 
-    callback = NeptuneCallback(run=run, log_model_diagram=log_model_diagram, log_on_batch=log_on_batch)
+    callback = NeptuneCallback(
+        run=run, log_model_diagram=log_model_diagram, log_on_batch=log_on_batch, log_model_summary=log_model_summary
+    )
 
     (x_train, y_train), (x_test, y_test) = dataset
 
@@ -30,18 +33,21 @@ def test_e2e(dataset, model, log_model_diagram, log_on_batch):
     )
 
     run.wait()
-    validate_results(run, log_model_diagram, log_on_batch, base_namespace="training")
+    validate_results(run, log_model_diagram, log_on_batch, log_model_summary, base_namespace="training")
 
 
 def test_e2e_using_namespace(dataset, model):
     log_model_diagram = True
     log_on_batch = False
+    log_model_summary = True
 
     run = init_run()
     namespace = "my_namespace"
     handler = run[namespace]
 
-    callback = NeptuneCallback(run=handler, log_model_diagram=log_model_diagram, log_on_batch=log_on_batch)
+    callback = NeptuneCallback(
+        run=handler, log_model_diagram=log_model_diagram, log_on_batch=log_on_batch, log_model_summary=log_model_summary
+    )
 
     (x_train, y_train), (x_test, y_test) = dataset
 
@@ -55,10 +61,10 @@ def test_e2e_using_namespace(dataset, model):
     )
 
     run.wait()
-    validate_results(run, log_model_diagram, log_on_batch, base_namespace=f"{namespace}/training")
+    validate_results(run, log_model_diagram, log_on_batch, log_model_summary, base_namespace=f"{namespace}/training")
 
 
-def validate_results(run, log_model_diagram, log_on_batch, base_namespace):
+def validate_results(run, log_model_diagram, log_on_batch, log_model_summary, base_namespace):
     for subset in ["train", "validation"]:
         for granularity in ["batch", "epoch"]:
             if granularity == "batch" and not log_on_batch:
@@ -68,7 +74,12 @@ def validate_results(run, log_model_diagram, log_on_batch, base_namespace):
                 assert run.exists(f"{base_namespace}/{subset}/{granularity}/accuracy")
                 assert run.exists(f"{base_namespace}/{subset}/{granularity}/loss")
 
-    assert run.exists(f"{base_namespace}/model/summary")
+    if log_model_summary:
+        assert run.exists(f"{base_namespace}/model/summary")
+        assert run[f"{base_namespace}/model/summary"].fetch_extension() == "txt"
+    else:
+        assert not run.exists(f"{base_namespace}/model/summary")
+
     assert run.exists(f"{base_namespace}/model/learning_rate")
 
     assert run.exists(f"{base_namespace}/model/optimizer_config")
