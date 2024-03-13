@@ -41,6 +41,8 @@ except ImportError as exc:
             pip install tensorflow"""
         raise ModuleNotFoundError(msg) from exc
 
+from neptune.common.warnings import NeptuneWarning
+
 from neptune_tensorflow_keras.impl.version import __version__
 
 try:
@@ -162,13 +164,13 @@ class NeptuneCallback(Callback):
             try:
                 self._model_logger["summary"] = _model_summary_file(self.model)
             except ValueError as e:
-                warnings.warn(f"Model summary not logged. {e}", category=RuntimeWarning)
+                warnings.warn(f"Model summary not logged. {e}", category=NeptuneWarning)
 
         if self._log_model_diagram:
             try:
                 self._model_logger["visualization"] = _model_diagram(self.model)
             except ValueError as e:
-                warnings.warn(f"Model visualization not logged. {e}", category=RuntimeWarning)
+                warnings.warn(f"Model visualization not logged. {e}", category=NeptuneWarning)
 
     def on_train_batch_end(self, batch, logs=None):
         if self._log_on_batch:
@@ -190,7 +192,7 @@ class NeptuneCallback(Callback):
 
 def _model_summary_file(model) -> File:
     stream = io.StringIO()
-    model.summary(print_fn=lambda x: stream.write(x + "\n"))
+    model.summary(print_fn=lambda x, **kwargs: stream.write(x + "\n"))
     return File.from_stream(stream, extension="txt")
 
 
