@@ -1,3 +1,8 @@
+## neptune-tensorflow-keras 2.2.2
+
+### Fixes
+- Handled additional kwargs passed to `model.summary()`'s `print_fn` ([#61](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/61))
+
 ## neptune-tensorflow-keras 2.2.1
 
 ### Changes
