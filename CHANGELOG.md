@@ -1,8 +1,5 @@
 ## neptune-tensorflow-keras 2.2.2
 
-### Changes
-- `RuntimeWarning` replaced by `NeptuneWarning` if model summary or diagram cannot be logged ([#61](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/61))
-
 ### Fixes
 - Handled additional kwargs passed to `model.summary()`'s `print_fn` ([#61](https://github.com/neptune-ai/neptune-tensorflow-keras/pull/61))
 

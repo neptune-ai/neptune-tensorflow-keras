@@ -41,8 +41,6 @@ except ImportError as exc:
             pip install tensorflow"""
         raise ModuleNotFoundError(msg) from exc
 
-from neptune.common.warnings import NeptuneWarning
-
 from neptune_tensorflow_keras.impl.version import __version__
 
 try:
@@ -164,13 +162,13 @@ class NeptuneCallback(Callback):
             try:
                 self._model_logger["summary"] = _model_summary_file(self.model)
             except ValueError as e:
-                warnings.warn(f"Model summary not logged. {e}", category=NeptuneWarning)
+                warnings.warn(f"Model summary not logged. {e}", category=RuntimeWarning)
 
         if self._log_model_diagram:
             try:
                 self._model_logger["visualization"] = _model_diagram(self.model)
             except ValueError as e:
-                warnings.warn(f"Model visualization not logged. {e}", category=NeptuneWarning)
+                warnings.warn(f"Model visualization not logged. {e}", category=RuntimeWarning)
 
     def on_train_batch_end(self, batch, logs=None):
         if self._log_on_batch:
