@@ -25,9 +25,9 @@ Experiment tracking for Keras-trained models.
 ## Resources
 
 * [Documentation](https://docs.neptune.ai/integrations/keras)
-* [Code example on GitHub](https://github.com/neptune-ai/examples/blob/main/integrations-and-supported-tools/tensorflow-keras/scripts)
-* [Runs logged in the Neptune app](https://app.neptune.ai/o/common/org/tf-keras-integration/e/TFK-18/all)
-* [Run example in Google Colab](https://colab.research.google.com/github/neptune-ai/examples/blob/master/integrations-and-supported-tools/tensorflow-keras/notebooks/Neptune_TensorFlow_Keras.ipynb)
+* [Code example on GitHub](https://github.com/neptune-ai/examples/blob/main/integrations-and-supported-tools/tensorflow-keras)
+* [Runs logged in the Neptune app](https://neptune.ai/resources/tensorflow-keras-integration-example)
+* [Run example in Google Colab](https://colab.research.google.com/github/neptune-ai/examples/blob/master/integrations-and-supported-tools/keras/notebooks/Neptune_Keras.ipynb)
 
 ## Example
 
@@ -42,23 +42,19 @@ In Python:
 ```python
 import neptune
 from neptune.integrations.tensorflow_keras import NeptuneCallback
-from neptune import ANONYMOUS_API_TOKEN
 
 # Start a run
 run = neptune.init_run(
     project="common/tf-keras-integration",
-    api_token=ANONYMOUS_API_TOKEN,
+    api_token=neptune.ANONYMOUS_API_TOKEN,
 )
 
 # Create a NeptuneCallback instance
-neptune_cbk = NeptuneCallback(run=run, base_namespace="metrics")
+neptune_cbk = NeptuneCallback(run=run)
 
 # Pass the callback to model.fit()
 model.fit(
-    x_train,
-    y_train,
-    epochs=5,
-    batch_size=64,
+    ...,
     callbacks=[neptune_cbk],
 )
 
